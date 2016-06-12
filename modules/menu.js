@@ -8,35 +8,25 @@ app.controller('MenuController',
     		    		
     	$scope.SetMenu = function(){
 			$element.find("li").removeClass("active");
-			$element.find(".collapsible-body").hide();
-			var ci = $($element).find("a[href='#" + $location.path().substring(1) + "']").closest("li");
+			var page = $location.path().substring(1);
+			var ci = $element.find("a[href='#" + page + "']").closest("li");
 			if(ci.length){
-				ci.parents(".collapsible-body").show();
 				ci.addClass("active");
 			}
-			
-			/*var e = $('[ng-controller="MenuController"]');
-			console.log($location.path().substring(1));	
-			console.log(e.find('[href="#' + $location.path().substring(1) + '"]'));
-			console.log(e.find('*'));
-			console.log(e);*/
 		}	
     		
 		$scope.$on('$locationChangeSuccess', function (event, next) {
 			$scope.SetMenu();
         });
         
-		$scope.$watch(function() {return LoginService.Authorized();}, function (next, prev) {
+		$scope.$watch(function() {return $element.find('a').length;}, function (next, prev) {
 			//console.log(next, prev);	
 			$scope.SetMenu();					
         });
 				 
-		$scope.Initialize = function(){						    
-		   /* $('.collapsible').collapsible({
-  				accordion : true
-			});	*/
+		/*$scope.Initialize = function(){
 			$scope.SetMenu();
-		};
+		};*/
 		//$scope.$on('$includeContentLoaded', $scope.initialize);			 
     }]);
     

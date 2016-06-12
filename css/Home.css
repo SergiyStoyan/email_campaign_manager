@@ -110,7 +110,7 @@ td.table-editor {
     padding:5px;
 }
 
-table.my tbody tr.selected{
+table.dataTable tbody tr.selected{
     background-color:#f63 ;
 }
 
@@ -204,31 +204,6 @@ border-right: none;
 .ProductLink_table tr:first-child td{
 border-top: none;
 }
-
-   table tbody tr.Grouped.MainInGroup:not(.selected){
-        background-color1:#fb4;
-                background-color:#7d6;
-    }
-   /*table tbody tr.Grouped.MainInGroup.selected{
-        font-weight:bold;
-        background-color:#885;
-    }*/
-   
-   table tbody tr.Grouped:not(.selected){
-        background-color1:#cdc;
-        background-color:#afa;
-    }
-   /*table tbody tr.Grouped.even{
-        background-color:#cc8;
-    }*/
-   /*table tbody tr.Grouped.selected{
-        background-color:#958;
-    }*/
-
-   #ProductsTable img{
-       width:60px;
-       height:auto;
-   }
    
 .Menu ul {
     list-style-type: none;
@@ -255,9 +230,15 @@ border-top: none;
     color: #ff9;
 }
 
-.Menu li .active {
-    background-color: #ccc;
+.Menu .active {
+    background-color: #4cc;
     color: #000;
+} 
+
+.Menu .active a {
+    color: #000;
+	pointer-events: none;
+	cursor: default;
 } 
 
 
