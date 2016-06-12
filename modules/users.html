@@ -11,7 +11,7 @@
 	</table>
 
 	<div edit-form class="hidden">
-	  <form name="form" class="edit-form" novalidate>
+	  <form name="Form" class="edit-form" novalidate>
 		Email: <input type="email" ng-model="Data.email" required /><br />	
 		Password: <input type="text" ng-model="Data.password" required /><br />	
 		Type: <select ng-model="Data.type" ng-options="o for o in ['admin','user']" required></select><br />
@@ -20,7 +20,7 @@
 	</div>
 
 	<div details-form class="hidden">
-	  <form name="form" class="edit-form" novalidate>
+	  <form name="Form" class="edit-form" novalidate>
 		Email: <input type="email" ng-model="Data.email" required ng-disabled="true"/><br />	
 		Password: <input type="text" ng-model="Data.password" required ng-disabled="true"/><br />	
 		Type: <select ng-model="Data.type" ng-options="o for o in ['admin','user']" required ng-disabled="true"></select><br />

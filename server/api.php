@@ -244,7 +244,6 @@ class DataTable
         $fields_sql = join(', ', $fs);        	
         	
         $sql = "SELECT $fields_sql $from_sql $where_sql $order_sql $limit_sql";
-        Logger::Write($sql + "|");
         $rs = Db::GetArray($sql);
         if($_REQUEST['search']['value'])
         {			

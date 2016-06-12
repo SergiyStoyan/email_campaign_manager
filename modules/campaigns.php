@@ -32,7 +32,6 @@ switch ($action)
 	  	);
     return;
   	case 'Add':
-  		//$_POST[]
   		Respond(DataTable::Insert('campaigns', $_POST));
     return;
   	case 'GetByKeys':

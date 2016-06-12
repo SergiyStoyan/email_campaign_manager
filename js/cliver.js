@@ -319,7 +319,6 @@ var Cliver = {
 	    e.close = definition.on_close;
 	    e.definition = definition;
 
-	        	console.log(e);
 	    return e;
 	},
 
@@ -388,12 +387,12 @@ var Cliver = {
 
 	            var buttons = {};
 	            if (put_data_url) {
-	                buttons[ok_button_text] = function () {	                    
-		                var angular_controller_e = content_div_e.closest('[ng-controller]');
-						var angular_controller_scope = angular.element(angular_controller_e).scope();
+	                buttons[ok_button_text] = function () {
+						var angular_controller_scope = content_div_e.closest('[ng-controller]').scope();
 						var data = angular_controller_scope.Data;
 						
-						//var form = content_div_e.find('form');
+						if(content_div_e.find('form').scope().Form.$invalid)
+							return;
 						//var data = form.serialize();
 						
 						//console.log(angular_controller_scope);
