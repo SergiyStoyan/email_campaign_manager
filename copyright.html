@@ -1,0 +1,109 @@
+﻿<style>
+
+    .copyright-container{
+        position:relative; 
+        white-space:nowrap;
+        color: #eee;
+        font-style1:italic;
+        font-size1: 1.1em;
+    }
+
+.copyright-container a{
+        color: #eee;
+        text-decoration1:underline;
+        text-decoration:none;
+    }
+
+.copyright-container a:hover{
+        color: #9f0;
+        text-decoration:underline;
+    }
+
+.copyright-mark td{
+        width: 6px;
+        height: 6px;
+        padding: 0px;
+        border-collapse: separate;
+        border-spacing: 1px;
+    }
+
+table.copyright-mark{
+        margin: 0px;
+        padding:0px;
+        border: 1px solid #eee;
+    }
+    
+.copyright-tooltip {
+    display: none;
+    position: absolute;  
+    top: -10px;
+    left: 10px;
+    z-index:10;
+    white-space:nowrap;
+    background: #f00;
+    border: 1px solid #eed;
+    border-radius: 4px;
+    padding: 2px 4px;
+    color: #fff;
+}
+    
+.copyright-container:hover .copyright-tooltip {
+    display: block;
+}
+</style>
+
+<div class="copyright-container">
+    <div class="copyright-tooltip">developed by Sergey Stoyan, <a href="http://cliversoft.com">www.cliversoft.com</a></div>
+    <table style="margin: 0px; border: 0px;">
+        <tr>
+            <td style="margin: 0px; border: 0px; padding:0px;">
+                <a href="http://cliversoft.com">
+                    <table id="copyright" class="copyright-mark">
+                        <tr>
+                            <td bgcolor=#ff9966 id="copyright_td1"></td>
+                            <td bgcolor=#999988 id="copyright_td2"></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor=#ddddcc id="copyright_td3"></td>
+                            <td bgcolor=#bb99dd id="copyright_td4"></td>
+                        </tr>
+                    </table>
+                </a>
+            </td>
+            <td>
+                &nbsp;<a href="http://cliversoft.com" style="padding-right:0;">CliverSoft.com</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<script language="javascript">
+    {
+        function get_random(max) {
+            var ran_unrounded = Math.random() * max;
+            return ran_number = Math.floor(ran_unrounded);
+        };
+
+        function dec2hex(d) {
+            var hD = "0123456789ABCDEF";
+            var h = hD.substr(d & 15, 1);
+            while (d > 15) { d >>= 4; h = hD.substr(d & 15, 1) + h; }
+            return h;
+        };
+
+        function random_color(red_min, red_max, green_min, green_max, blue_min, blue_max) {
+            var red = red_min + get_random(red_max - red_min);
+            var green = green_min + get_random(green_max - green_min);
+            var blue = blue_min + get_random(blue_max - blue_min);
+            return "#" + dec2hex(red) + dec2hex(green) + dec2hex(blue);
+        };
+
+        function play() {
+            var t = document.getElementById("copyright_td" + (get_random(4) + 1));
+            var r = random_color(50, 255, 100, 200, 80, 255);
+            t.style.backgroundColor = r;
+            setTimeout('play()', 500);
+        };
+
+        play();
+    };
+</script>

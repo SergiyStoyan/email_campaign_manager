@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Email Campaign Manager</title>
+
+	<meta name="description" content="">
+	
+	<link rel="stylesheet" type="text/css" href="css/DataTables-1.10.10/css/jquery.dataTables.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-1.11.4/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="css/Site.css" />
+	<link rel="stylesheet" type="text/css" href="css/Home.css" />
+	<!--link rel="stylesheet" type="text/css" href="css/style.css" /-->
+		
+<script src="js/jquery-2.2.0.min.js"></script>
+<script src="js/jquery-ui-1.11.4.min.js"></script>
+
+<script src="//code.angularjs.org/1.5.0/angular.js"></script>
+<script src="//code.angularjs.org/1.5.0/angular-route.js"></script>
+<script src="//code.angularjs.org/1.5.0/angular-cookies.js"></script>
+<script src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+
+<script src="js/jquery.dataTables-1.10.7.js"></script>
+<script src="js/cliver.js"></script>
+
+</head>
+
+<body ng-app="EmailCampaignManager" ng-init1="Initialize()">
+
+<!--div style="position:relative;width:100px;height:100px;background-color:#090">
+gdfgdfg
+<div>fdgdgdfg</div>
+<div style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:1000;background-color:#007">rrrrrrrrrrrr</div>
+</div-->
+
+     <header>
+         <div class="content-wrapper">
+             <div class="float-left">
+                 <p class="site-title">Email Campaign Manager</p>
+             </div>
+             <div class="float-right header">
+					<ng-include src="'modules/menu.html'"></ng-include>
+             </div>
+         </div>
+         <div class="content-wrapper"></div>
+             <div class="content-wrapper">
+                 <div class="float-right">
+                 </div>
+
+             </div>
+	</header>     
+    <div id="body">
+        <div class="content-wrapper clear-fix">  
+			<h1 class="title">{{Header()}}</h1>
+			<ng-view></ng-view>
+        </div>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">  
+				<ng-include src="'copyright.html'"></ng-include>
+            </div>
+        </div>
+    </footer>
+</body>
+	
+<script src="app.js"></script>
+<script src="modules/menu.js"></script>
+<script src="modules/login_services.js"></script>
+<script src="modules/login.js"></script>
+<script src="modules/servers.js"></script>
+<script src="modules/templates.js"></script>
+<script src="modules/users.js"></script>
+<script src="modules/campaigns.js"></script>
+
+<script>
+//Cliver.ShowError("test", "test");
+//var u = "http://test.com?tr=gdfg&hfng=45#hfgh";
+//var g = Cliver.UpdateQueryStringParameter(u, 'tr', '000');
+//console.log(g);
+</script>
+</html>

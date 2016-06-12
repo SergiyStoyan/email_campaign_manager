@@ -1,0 +1,42 @@
+﻿<div ng-controller="ServersController">
+
+	<table id="table_Servers" class="" style="width:100%;" ng-init="FillTable()">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Status</th>
+				<th>Host</th>
+				<th>Sender</th>
+			</tr>
+		</thead>
+	</table>
+
+	<div edit-form class="hidden">
+	  <form name="form" class="edit-form" novalidate>
+		Name: <input type="text" ng-model="Data.name" required /><br />	
+		Host: <input type="url" ng-model="Data.host" required /><br />	
+		Port: <input type="number" ng-model="Data.port" required /><br />	
+		Login: <input type="text" ng-model="Data.login" required /><br />	
+		Password: <input type="text" ng-model="Data.password" required /><br />	
+		Sender Email: <input type="email" ng-model="Data.sender_email" required /><br />	
+	  </form>
+	</div>
+
+	<div details-form class="hidden">
+	  <form name="form" class="edit-form" novalidate>
+		Name: <input type="text" ng-model="Data.name" required ng-disabled="true"/><br />	
+		Host: <input type="url" ng-model="Data.host" required ng-disabled="true" /><br />	
+		Port: <input type="number" ng-model="Data.port" required ng-disabled="true" /><br />	
+		Login: <input type="text" ng-model="Data.login" required ng-disabled="true" /><br />	
+		Password: <input type="text" ng-model="Data.password" required ng-disabled="true" /><br />	
+		Sender Email: <input type="email" ng-model="Data.sender_email" required ng-disabled="true" /><br />	
+	  </form>
+	</div>
+
+</div>
+		
+
+
+
+
