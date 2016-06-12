@@ -21,14 +21,15 @@ app.controller('CampaignsController',
 			if(!$scope.Options){
 				$.ajax({
 		            type: 'POST',
-		            url: 'modules/campaignes.php',
+		            url: 'modules/campaigns.php?action=GetOptions',
 		            data: {},
 		            success: function (data) {
 		            	if(typeof(data) == 'string')
 		            		Cliver.ShowError(data);
 	                	else if(data._ERROR)
 		            		Cliver.ShowError(data._ERROR);		            		
-		            	$scope.Options = data;		            	
+		            	$scope.Options = data;
+		            	console.log($scope.Options);
                 		$scope.$apply();
 		            },
 		            error: function (xhr, error) {

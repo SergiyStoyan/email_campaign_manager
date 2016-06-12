@@ -44,9 +44,9 @@ switch ($action)
   		Respond(DataTable::Delete('campaignes', $_POST));
     return;
   	case 'GetOptions':
-		$templates = Db::GetRowArray("SELECT id, name FROM templates WHERE user_id=".$User['id']);
-		$servers = Db::GetRowArray("SELECT id, name FROM servers WHERE user_id=".$User['id']);
-		$email_lists = Db::GetRowArray("SELECT id, name FROM email_lists WHERE user_id=".$User['id']);
+		$templates = Db::GetArray("SELECT id, name FROM templates WHERE user_id=".$User['id']);
+		$servers = Db::GetArray("SELECT id, name FROM servers");
+		$email_lists = Db::GetArray("SELECT id, name FROM email_lists WHERE user_id=".$User['id']);
 		$data = [
 			'templates'=>$templates,
 			'servers'=>$servers,
