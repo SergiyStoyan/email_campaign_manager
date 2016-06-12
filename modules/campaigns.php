@@ -19,29 +19,30 @@ switch ($action)
 	case 'GetTableData':
 	  	Respond(DataTable::FetchData(
 	  		[
-	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>'campaignes.id'],
-	  			['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaignes.name'],
+	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>'campaigns.id'],
+	  			['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaigns.name'],
 	  			['Name'=>'template', 'Searchable' => true, 'Order' => null, 'Expression'=>'templates.name'],
 	  			['Name'=>'email_list', 'Searchable' => true, 'Order' => null, 'Expression'=>'email_lists.name'],
 	  			['Name'=>'server', 'Searchable' => true, 'Order' => null, 'Expression'=>'servers.name'],
 	  			['Name'=>'start_time', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
-	  			['Name'=>'status', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaignes.status'],
+	  			['Name'=>'status', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaigns.status'],
 	  		],
-	  		'FROM campaignes INNER JOIN servers ON campaignes.server_id=servers.id INNER JOIN templates ON campaignes.template_id=templates.id INNER JOIN email_lists ON campaignes.email_list_id=email_lists.id WHERE campaignes.user_id='.$User['id']
+	  		'FROM campaigns INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.user_id='.$User['id']
 	  		)
 	  	);
     return;
   	case 'Add':
-  		Respond(DataTable::Insert('campaignes', $_POST));
+  		//$_POST[]
+  		Respond(DataTable::Insert('campaigns', $_POST));
     return;
   	case 'GetByKeys':
-  		Respond(DataTable::GetByKeys('campaignes', $_POST));
+  		Respond(DataTable::GetByKeys('campaigns', $_POST));
     return;
   	case 'Save':
-  		Respond(DataTable::Save('campaignes', $_POST));
+  		Respond(DataTable::Save('campaigns', $_POST));
     return;
   	case 'Delete':
-  		Respond(DataTable::Delete('campaignes', $_POST));
+  		Respond(DataTable::Delete('campaigns', $_POST));
     return;
   	case 'GetOptions':
 		$templates = Db::GetArray("SELECT id, name FROM templates WHERE user_id=".$User['id']);

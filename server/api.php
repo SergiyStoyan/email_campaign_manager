@@ -232,7 +232,7 @@ class DataTable
                 continue;
             array_push($ordered_fields, $field." ".$field['Order']);
         }
-        $order_sql = " ORDER BY ";
+        $order_sql = "ORDER BY ";
         if(count($ordered_fields))
             $order_sql .= join(", ", $ordered_fields);
         else
@@ -240,10 +240,11 @@ class DataTable
             
         $fs = [];
         foreach($fields as $f) 
-        	array_push($fs, $f['Expression'] ? $f['Expression'] + " AS " + $f['Name'] : $f['Name']);        	
+        	array_push($fs, $f['Expression'] ? $f['Expression']." AS ".$f['Name'] : $f['Name']);        	
         $fields_sql = join(', ', $fs);        	
         	
         $sql = "SELECT $fields_sql $from_sql $where_sql $order_sql $limit_sql";
+        Logger::Write($sql + "|");
         $rs = Db::GetArray($sql);
         if($_REQUEST['search']['value'])
         {			

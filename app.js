@@ -1,5 +1,14 @@
 ﻿'use strict';
 
+//TBD:
+//- validation
+//- menu
+//- mount html editor
+//- test servers
+//- unite edit forms 
+//- processing div in dialog append as a child
+
+
 Cliver.ProcessingImageSrc = 'images/ajax-loader.gif';
 
 //angular.module('Login', []);
@@ -40,6 +49,10 @@ var app = angular.module('EmailCampaignManager', [
         .when('/campaigns', {
             controller: 'CampaignsController',
             templateUrl: 'modules/campaigns.html',
+        })			
+        .when('/email_lists', {
+            controller: 'EmailListsController',
+            templateUrl: 'modules/email_lists.html',
         })		
         .otherwise({ redirectTo: '/login' });
 }])

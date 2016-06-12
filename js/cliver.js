@@ -393,10 +393,15 @@ var Cliver = {
 						var angular_controller_scope = angular.element(angular_controller_e).scope();
 						var data = angular_controller_scope.Data;
 						
+						//var form = content_div_e.find('form');
+						//var data = form.serialize();
+						
 						//console.log(angular_controller_scope);
 						//console.log(data);
-	                    //if (!e.find("form").valid())
+	                    //if (!form.valid()){
+						//	console.log(data);
 	                    //    return;
+						//}
 
 	                    e.show_processing();
 

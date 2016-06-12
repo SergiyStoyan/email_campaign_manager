@@ -1,0 +1,31 @@
+﻿<div ng-controller="EmailListsController">
+
+	<table id="table_EmailLists" class="" style="width:100%;" ng-init="FillTable()">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+			</tr>
+		</thead>
+	</table>
+
+	<div edit-form class="hidden">
+	  <form name="form" class="edit-form" novalidate>
+		Name: <input type="text" ng-model="Data.name" required /><br />	
+		Emails: <textarea ng-model="Data.emails" required /><br />	
+	  </form>
+	</div>
+
+	<div details-form class="hidden">
+	  <form name="form" class="edit-form" novalidate>
+		Name: <input type="text" ng-model="Data.name" ng-disabled="true" /><br />
+		Emails: <textarea ng-model="Data.emails" ng-disabled="true" /><br />
+	  </form>
+	</div>
+
+</div>
+		
+
+
+
+
