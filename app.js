@@ -1,7 +1,6 @@
 ﻿'use strict';
 
 //TBD:
-//- validation
 //- menu
 //- mount html editor
 //- test servers
@@ -159,6 +158,10 @@ var app = angular.module('EmailCampaignManager', [
 			}
 			return null;
 		};
+		
+		$rootScope.ApiUrl = function(route){
+			return route.current.templateUrl.replace(/\.html$/i, '.php');
+		}
 		
 		$rootScope.HeaderType = function(){
 			//console.log($location.path().substring(1));

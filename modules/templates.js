@@ -10,7 +10,7 @@ app.controller('TemplatesController',
 			 Cliver.InitTable({
 			 	table_id: 'table_Templates',
 			 	server: {
-                	request_path: $route.current.templateUrl.replace(/\.html$/i, '.php'),
+                	request_path: $rootScope.ApiUrl($route),
             	},
         	});
 		};	

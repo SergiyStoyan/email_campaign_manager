@@ -3,14 +3,14 @@
 //angular.module('Servers')
 
 app.controller('ServersController',
-    ['$scope', '$route',
-    function ($scope, $route) {
+    ['$scope', '$rootScope', '$route',
+    function ($scope, $rootScope, $route) {
     	
     	$scope.FillTable = function(){
 			 Cliver.InitTable({
 			 	table_id: 'table_Servers',
 			 	server: {
-                	request_path: $route.current.templateUrl.replace(/\.html$/i, '.php'),
+                	request_path: $rootScope.ApiUrl($route),
             	},
         	});
 		};	
