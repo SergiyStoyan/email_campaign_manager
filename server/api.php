@@ -10,10 +10,27 @@
 
 include_once("common/logger.php");
 include_once("common/db.php");
-
+	
 $User = Login::GetCurrentUser();
 if(!$User)  		
   	Respond(null, 'The user is not identified. Please provide correct login info.');
+
+function Respond($data, $error=null)
+{
+	header('Content-Type: application/json');
+	if(!$data or !is_array($data))
+		$data = array($data);
+	if($error)
+	{
+		if(isset($data['_ERROR']))
+			$data['_ERROR'] .= "\r\n$error";
+		else
+			$data['_ERROR'] = $error;		
+	}
+	echo json_encode($data);
+	exit();
+} 
+  	
 /*$method = $_SERVER['REQUEST_METHOD'];
 //$request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
 switch ($method) 
@@ -71,18 +88,6 @@ switch ($method)
 		}
 	}
 }*/
-
-function Respond($data, $error=null)
-{
-	header('Content-Type: application/json');
-	if($error)
-		if(isset($data['_ERROR']))
-			$data['_ERROR'] .= '\r\n'.$error;
-		else
-			$data['_ERROR'] = $error;
-	echo json_encode($data);
-	exit();
-}
 
 class Login
 {

@@ -31,7 +31,7 @@ app.controller('LoginController',
 	            },
 	            error: function (xhr, error) {
 	                console.log(error, xhr);
-                	Cliver.ShowError(xhr.responseText);
+                	Cliver.ShowError(xhr.responseText + "<br>" + error);
 	            }
 	        });
         };
