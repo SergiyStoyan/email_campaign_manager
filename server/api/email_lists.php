@@ -7,7 +7,7 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-include_once("../server/api.php");
+include_once("../api.php");
 
 //Logger::Write($_GET);
 //Logger::Write($_POST);
@@ -21,25 +21,24 @@ switch ($action)
 			[
 				['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
 				['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
-				['Name'=>'subject', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
-				//['Name'=>'template', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
+				//['Name'=>'emails', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 			],
-			'FROM templates WHERE user_id='.$User['id']
+			'FROM email_lists WHERE user_id='.$User['id']
 		));
     return;
   	case 'Add':
-  		Respond(DataTable::Insert('templates', $_POST));
+  		Respond(DataTable::Insert('email_lists', $_POST));
     return;
   	case 'GetByKeys':
-  		Respond(DataTable::GetByKeys('templates', $_POST));
+  		Respond(DataTable::GetByKeys('email_lists', $_POST));
     return;
   	case 'Save':
-  		Respond(DataTable::Save('templates', $_POST));
+  		Respond(DataTable::Save('email_lists', $_POST));
     return;
   	case 'Delete':
   		//if(Db::GetSingleValue("SELECT id FROM campaigns WHERE id=".$_POST['id']))
   		//	Respond(null, "This template is used by campaigns");
-  		Respond(DataTable::Delete('templates', $_POST));
+  		Respond(DataTable::Delete('email_lists', $_POST));
     return;
 	default:
 		throw new Exception("Unhandled action: $action");

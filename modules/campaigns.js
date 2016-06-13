@@ -21,7 +21,7 @@ app.controller('CampaignsController',
 			if(!$scope.Options){
 				$.ajax({
 		            type: 'POST',
-		            url: 'modules/campaigns.php?action=GetOptions',
+		            url: $rootScope.ApiUrl($route) + '?action=GetOptions',
 		            data: {},
 		            success: function (data) {
 		            	if(typeof(data) == 'string')

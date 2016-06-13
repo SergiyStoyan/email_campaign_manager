@@ -2,7 +2,6 @@
 
 //TBD:
 //- mount html editor
-//- fix table search and sort
 //- add testing servers
 //- unite edit forms 
 //- processing div in dialog append as a child
@@ -175,7 +174,10 @@ var app = angular.module('EmailCampaignManager', [
 		};
 		
 		$rootScope.ApiUrl = function(route){
-			return route.current.templateUrl.replace(/\.html$/i, '.php');
+			//return route.current.templateUrl.replace(/\.html$/i, '.php');
+			var api = 'server/api/' + route.current.templateUrl.replace(/.*\/(.*?)\.html$/i, '$1.php');
+			//console.log(api);
+			return api;
 		}
 		
 		$rootScope.HeaderType = function(){

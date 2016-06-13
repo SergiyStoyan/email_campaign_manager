@@ -12,7 +12,7 @@ app.factory('LoginService',
 
 			$.ajax({
 	            type: 'POST',
-	            url: 'modules/login.php',
+	            url: 'server/api/login.php',//$rootScope.ApiUrl($route),
 	            data: { UserName: username, Password: password, RememberMe: remember_me },
 	            success: function (user) {
             		//console.log(user);

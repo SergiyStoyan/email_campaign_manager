@@ -7,7 +7,7 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-include_once("../server/api.php");
+include_once("../api.php");
 
 //Logger::Write($_GET);
 //Logger::Write($_POST);
