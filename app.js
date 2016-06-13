@@ -130,13 +130,28 @@ var app = angular.module('EmailCampaignManager', [
 			$rootScope.User = null;
 												 
 		$rootScope.Logout = function(){
+			//does not work!
 			var cookies = $cookies.getAll();
 			angular.forEach(cookies, function (v, k) {
+				console.log(v,k);
     			$cookies.remove(k);
-			});
-			//sessionStorage.empty();alert(1);
+			});		
+			
+			//sessionStorage.clear();
+			//localStorage.clear();
+			
+			//does not work!
+			var cookies = document.cookie.split(";");
+			for(var i=0; i < cookies.length; i++) {
+    			var equals = cookies[i].indexOf("=");
+    			var name = equals > -1 ? cookies[i].substr(0, equals) : cookies[i];
+    			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+			}
+				//console.log(document.cookie);
+			
 			$rootScope.User = null;
-			$location.path('/login');
+			//$location.path('login.php');
+			window.location.href = 'logout.php';
 		};
 		//$rootScope.Logout();
 		$rootScope.Header = function(){

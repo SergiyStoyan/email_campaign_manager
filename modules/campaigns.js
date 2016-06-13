@@ -29,7 +29,7 @@ app.controller('CampaignsController',
 	                	else if(data._ERROR)
 		            		Cliver.ShowError(data._ERROR);		            		
 		            	$scope.Options = data;
-		            	console.log($scope.Options);
+		            	//console.log($scope.Options);
                 		$scope.$apply();
 		            },
 		            error: function (xhr, error) {

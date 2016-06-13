@@ -4,7 +4,7 @@
 		<li ng-if="User"><a href="#email_lists">Email Lists</a></li>
 		<li ng-if="User"><a href="#campaigns">Campaigns</a></li>
 		<li ng-if="User"><a href="#templates">Templates</a></li>
-		<li ng-if="User"><a href="#users">Users</a></li>
+		<li ng-if="User.type == 'admin'"><a href="#users">Users</a></li>
 		<li ng-if="User"><a href="#" ng-click="Logout()">Logout</a></li>
 	</ul>
 </nav>
