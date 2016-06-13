@@ -6,27 +6,6 @@ app.factory('LoginService',
     ['Base64', '$http', '$cookieStore', '$rootScope', '$timeout',
     function (Base64, $http, $cookieStore, $rootScope, $timeout) {
         var service = {};
-
-        service.Login = function (username, password, remember_me, callback) {
-            //callback('data', null); return;
-
-			$.ajax({
-	            type: 'POST',
-	            url: 'server/api/login.php',//$rootScope.ApiUrl($route),
-	            data: { UserName: username, Password: password, RememberMe: remember_me },
-	            success: function (user) {
-            		//console.log(user);
-	            	if(typeof(user) == 'string')
-                		callback(null, user);
-                	else
-                	   	callback(user, user._ERROR);
-	            },
-	            error: function (xhr, error) {
-	                console.log(error, xhr);
-                	callback(null, xhr.responseText);
-	            }
-	        });
-        };
         
         service.Authorized = function () {
         	//console.log($rootScope.globals.currentUser);
