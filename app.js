@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 //TBD:
-//- menu
 //- mount html editor
+//- fix table search and sort
 //- test servers
 //- unite edit forms 
 //- processing div in dialog append as a child

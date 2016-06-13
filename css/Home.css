@@ -227,15 +227,12 @@ border-top: none;
 
 .Menu li a:hover {
     background-color: #356;
-    color: #ff9;
+    color1: #ff9;
+    background-color1: #4cc;
 }
 
-.Menu .active {
-    background-color: #4cc;
-    color: #000;
-} 
-
 .Menu .active a {
+    background-color: #4cc;
     color: #000;
 	pointer-events: none;
 	cursor: default;

@@ -16,21 +16,21 @@
 
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Name: <input type="text" ng-model="Data.name" required /><br />	
-		Template: <select ng-model="Data.template_id" required><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Email List: <select ng-model="Data.email_list_id" required><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Server: <select ng-model="Data.server_id" required><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Start: <input type="datetime" ng-model="Data.start_time" required /><br />
+		Name<br /><input type="text" ng-model="Data.name" required /><br />	
+		Template<br /><select ng-model="Data.template_id" required><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Email List<br /><select ng-model="Data.email_list_id" required><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Server<br /><select ng-model="Data.server_id" required><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Start<br /><input type="datetime" ng-model="Data.start_time" required /><br />
 	  </form>
 	</div>
 
 	<div details-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Name: <input type="text" ng-model="Data.name" ng-disabled="true" /><br />	
-		Template: <select ng-model="Data.template_id" ng-disabled="true"><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Email List: <select ng-model="Data.email_list_id" ng-disabled="true"><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Server: <select ng-model="Data.server_id" ng-disabled="true"><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Start: <input type="datetime" ng-model="Data.start_time" ng-disabled="true" /><br />
+		Name<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />	
+		Template<br /><select ng-model="Data.template_id" ng-disabled="true"><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Email List<br /><select ng-model="Data.email_list_id" ng-disabled="true"><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Server<br /><select ng-model="Data.server_id" ng-disabled="true"><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
+		Start<br /><input type="datetime" ng-model="Data.start_time" ng-disabled="true" /><br />
 	  </form>
 	</div>
 
