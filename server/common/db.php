@@ -192,6 +192,11 @@ class Db
 		$c = &self::$connections[$connection_name];
 		return $c['db_name'];		
 	}
+	
+	static public function EscapeString($string, $connection_name=null)
+	{
+		return mysqli_real_escape_string(self::get_link($connection_name), $string);
+	}
 }
 
 ?>

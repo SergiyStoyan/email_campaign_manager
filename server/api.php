@@ -172,65 +172,56 @@ class DataTable
 			$fields[$k]['Entity'] = $f['Expression'] != null ? $f['Expression'] : $f['Name'];
 		
 		$total_count = Db::GetSingleValue("SELECT COUNT(".$fields[0]['Entity'].") $from_sql");
-		
-	//Logger::Write2($total_count);
-	
+			
 		$filtered_count = $total_count;
-		$where_sql = '';		
-        $conditions = [];
-        if($_REQUEST['search']['value'])
+        $search_conditions = [];
+        if($_POST['search']['value'])
         {
-        	$search = preg_replace("@\\'|\\%|\\\\|_@", "\\$0", $_REQUEST['search']['value']);
+        	$search = preg_replace("@\%@", "\\$0", $_POST['search']['value']);
             foreach($fields as $f)
             {
-				if(!$f->Searchable)
+				if(!$f['Searchable'])
 					continue;
-                array_push($conditions, $f->Entity." LIKE '%".mysqi_real_escape_string($search)."%'");
+                $search_conditions[] = $f['Entity']." LIKE '%".Db::EscapeString($search)."%'";
             }
         }
-        if(count($conditions))
+		$where_sql = '';
+        if(count($search_conditions))
         {
             if(strstr($from_sql, ' WHERE '))
                 $where_sql = " AND ";
             else
                 $where_sql = " WHERE "; 
-            $where_sql .= "(".join(" OR ", $conditions).")";
+            $where_sql .= "(".join(" OR ", $search_conditions).")";
         }
         if($where_sql)
-            $filtered_count = $Db::GetSingleValue("SELECT COUNT($fields[0]->Entity) " + from_sql + where_sql);		
+            $filtered_count = Db::GetSingleValue("SELECT COUNT(".$fields[0]['Entity'].") $from_sql $where_sql");		
 		
     	$limit_sql = '';
-    	if($_REQUEST['start'] && $_REQUEST['length'])
-        	$limit_sql = "LIMIT ".$_REQUEST['start'].", ".$_REQUEST['length'];
+    	if($_POST['start'] && $_POST['length'])
+        	$limit_sql = "LIMIT ".$_POST['start'].", ".$_POST['length'];
     
   		$sql_order = '';  		
-        $ofs2nothing = []; 
+        $ofes2nothing = []; 
         $ordered_fields = [];
-        foreach($_REQUEST['columns'] as $column)
+        foreach($_POST['order'] as $order)
         {
-        	if ($ignore_first_column_search)
+        	/*if ($ignore_first_column_search)
             {
             	$ignore_first_column_search = false;
                 continue;
-            }
-            if (!array_key_exists('sort', $column))
-                continue;
-            $field = $column['field'];
-            if(is_numeric($field))
-            	$field = $fields[n]['Entity'];
-            if(!$column['sort']['direction'])
-                array_push($ordered_fields, $field);
-            else
-                array_push($ordered_fields, $field." DESC");
-            $ofs2nothing[$field] = 0;
+            }*/                      
+            $fe = $fields[$order['column']]['Entity'];
+            $ordered_fields[] = $fe." ".$order['dir'];
+            $ofes2nothing[$fe] = 0;
         }
         foreach($fields as $field)
         {
             if (!$field['Order'])
                 continue;
-            if(array_key_exists($ofs2nothing, $field['Name']))
+            if(isset($ofes2nothing[$field['Entity']]))
                 continue;
-            array_push($ordered_fields, $field." ".$field['Order']);
+            $ordered_fields[] = $field." ".$field['Order'];
         }
         $order_sql = "ORDER BY ";
         if(count($ordered_fields))
@@ -245,14 +236,15 @@ class DataTable
         	
         $sql = "SELECT $fields_sql $from_sql $where_sql $order_sql $limit_sql";
         $rs = Db::GetArray($sql);
-        if($_REQUEST['search']['value'])
+        if($_POST['search']['value'])
         {			
-        	$search = preg_quote($_REQUEST['Search']['Value']);
-        	foreach($rs as $k=>$r)
+        	$search = preg_quote($_POST['search']['value']);
+        	foreach($rs as $i=>$r)
         	{
-                for($i = 0; $i < count($fields); $i++)
-                    if ($fields[$i]['Searchable'])
-                        $rs[$k][$i] = preg_replace($search, "<span class='match'>$0</span>", $rs[$k][$i]);
+        		$j = 0;
+        		foreach($r as $n=>$v)
+                    if ($fields[$j++]['Searchable'])
+                        $rs[$i][$n] = preg_replace("@$search@i", "<span class='match'>$0</span>", $rs[$i][$n]);
             }
         }
         

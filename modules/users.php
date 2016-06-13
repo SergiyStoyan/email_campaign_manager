@@ -19,7 +19,7 @@ switch ($action)
 	  	Respond(DataTable::FetchData(
 	  		[
 	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
-	  			['Name'=>'email', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
+	  			['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'type', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  		],
 	  		'FROM users'
