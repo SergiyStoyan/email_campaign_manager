@@ -42,11 +42,15 @@ var Cliver = {
 	            duration: 400
 	        }
 	    });
-
+		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", false);
 	    
 	    Cliver.ArrangeDialogWindow(e);
 	    return e;
+	},
+	
+	_RemoveRoundedCorners: function(e){
+		e.parent().find('*').removeClass('ui-corner-all');
 	},
 
 	ShowError: function(content, title) {
@@ -80,7 +84,7 @@ var Cliver = {
 	            duration: 400
 	        }
 	    });
-
+		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", false);
 
 	    Cliver.ArrangeDialogWindow(e);
@@ -263,7 +267,7 @@ var Cliver = {
 	    }
 	            
 	    e.dialog(definition.dialog);
-
+		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", [-2000, 0, 2000, 1000]);
 
 	    if (definition.background) {

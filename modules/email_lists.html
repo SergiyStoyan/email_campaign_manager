@@ -12,14 +12,14 @@
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name<br /><input type="text" ng-model="Data.name" required /><br />	
-		Emails<br /><textarea ng-model="Data.emails" required /><br />	
+		Emails<br /><textarea ng-model="Data.emails" style="overflow-y: scroll;" required /><br />	
 	  </form>
 	</div>
 
 	<div details-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />
-		Emails<br /><textarea ng-model="Data.emails" ng-disabled="true" /><br />
+		Emails<br /><textarea ng-model="Data.emails" style="overflow-y: scroll;" ng-disabled="true" /><br />
 	  </form>
 	</div>
 

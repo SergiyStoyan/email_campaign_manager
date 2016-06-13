@@ -3,7 +3,7 @@
 //TBD:
 //- mount html editor
 //- fix table search and sort
-//- test servers
+//- add testing servers
 //- unite edit forms 
 //- processing div in dialog append as a child
 

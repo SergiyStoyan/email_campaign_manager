@@ -15,8 +15,10 @@ app.controller('TemplatesController',
         	});
 		};
 		
-		$scope.InitTextarea = function(a){			
-		console.log(a);
+		$scope.InitTextarea = function(){
+			
+			
+			
 // Prevent jQuery UI dialog from blocking focusin
 $(document).on('focusin', function(e) {
     if ($(e.target).closest(".mce-window, .moxman-window").length) {

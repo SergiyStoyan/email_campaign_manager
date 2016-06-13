@@ -155,10 +155,12 @@ class DataTable
 	
 	public static function Save($table, $fields2value)
 	{	
+		$id = $fields2value['id'];
+		unset($fields2value['id']);
 		$ss = [];
 		foreach($fields2value as $f=>$v)
 			array_push($ss, "$f='".addslashes($v)."'");
-		return Db::Query("REPLACE $table SET ".join(', ', $ss));
+		return Db::Query("UPDATE $table SET ".join(', ', $ss)." WHERE id=$id");
 	}	
 	
 	public static function Delete($table, $fields2value)
