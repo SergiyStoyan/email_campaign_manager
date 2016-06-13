@@ -10,7 +10,8 @@
 
 include_once("../api.php");
 
-Respond($User);
-
-
+if(Login::GetCurrentUser())
+	Respond(Login::GetCurrentUser());
+else
+  	Respond(null, 'The user is not identified. Please provide correct login info.');
 ?>

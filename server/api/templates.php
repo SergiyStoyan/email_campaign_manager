@@ -12,7 +12,7 @@ include_once("../api.php");
 //Logger::Write($_GET);
 //Logger::Write($_POST);
 
-$_POST['user_id'] = $User['id'];  		
+$_POST['user_id'] = Login::UserId();  		
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
@@ -24,7 +24,7 @@ switch ($action)
 				['Name'=>'subject', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 				//['Name'=>'template', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 			],
-			'FROM templates WHERE user_id='.$User['id']
+			'FROM templates WHERE user_id='.$_POST['user_id']
 		));
     return;
   	case 'Add':

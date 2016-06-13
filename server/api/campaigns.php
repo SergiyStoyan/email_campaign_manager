@@ -12,7 +12,7 @@ include_once("../api.php");
 //Logger::Write($_GET);
 //Logger::Write($_POST);
 
-$_POST['user_id'] = $User['id'];
+$_POST['user_id'] = Login::UserId();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
@@ -27,7 +27,7 @@ switch ($action)
 	  			['Name'=>'start_time', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'status', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaigns.status'],
 	  		],
-	  		'FROM campaigns INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.user_id='.$User['id']
+	  		'FROM campaigns INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.user_id='.$_POST['user_id']
 	  		)
 	  	);
     return;
@@ -44,9 +44,9 @@ switch ($action)
   		Respond(DataTable::Delete('campaigns', $_POST));
     return;
   	case 'GetOptions':
-		$templates = Db::GetArray("SELECT id, name FROM templates WHERE user_id=".$User['id']);
+		$templates = Db::GetArray("SELECT id, name FROM templates WHERE user_id=".$_POST['user_id']);
 		$servers = Db::GetArray("SELECT id, name FROM servers");
-		$email_lists = Db::GetArray("SELECT id, name FROM email_lists WHERE user_id=".$User['id']);
+		$email_lists = Db::GetArray("SELECT id, name FROM email_lists WHERE user_id=".$_POST['user_id']);
 		$data = [
 			'templates'=>$templates,
 			'servers'=>$servers,

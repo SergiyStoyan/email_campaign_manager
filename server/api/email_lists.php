@@ -12,7 +12,7 @@ include_once("../api.php");
 //Logger::Write($_GET);
 //Logger::Write($_POST);
 
-$_POST['user_id'] = $User['id'];  		
+$_POST['user_id'] = Login::UserId();  		
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
@@ -23,7 +23,7 @@ switch ($action)
 				['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 				//['Name'=>'emails', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 			],
-			'FROM email_lists WHERE user_id='.$User['id']
+			'FROM email_lists WHERE user_id='.$_POST['user_id']
 		));
     return;
   	case 'Add':
