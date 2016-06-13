@@ -93,7 +93,7 @@ class Login
 		session_start();
 		if(session_id())
 			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".session_id()."'");			
-		if(!$user and array_key_exists('permanent_session_id', $_COOKIE))
+		if(!$user and array_key_exists('permanent_session_id', $_COOKIE) and strlen($_COOKIE['permanent_session_id']) > 8)
 			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".addslashes($_COOKIE['permanent_session_id'])."'");	
 		if(!$user and array_key_exists('UserName', $_REQUEST))
 			$user = Db::GetRowArray("SELECT * FROM users WHERE name='".addslashes($_REQUEST['UserName'])."' AND password='".addslashes($_REQUEST['Password'])."'");

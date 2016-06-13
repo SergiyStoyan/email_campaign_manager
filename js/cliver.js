@@ -50,7 +50,8 @@ var Cliver = {
 	},
 	
 	_RemoveRoundedCorners: function(e){
-		e.parent().find('*').removeClass('ui-corner-all');
+		e.closest('.ui-dialog').removeClass('ui-corner-all');
+		e.closest('.ui-dialog').find('*').removeClass('ui-corner-all');
 	},
 
 	ShowError: function(content, title) {
