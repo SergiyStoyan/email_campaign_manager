@@ -133,7 +133,7 @@ var app = angular.module('EmailCampaignManager', [
 			//does not work!
 			var cookies = $cookies.getAll();
 			angular.forEach(cookies, function (v, k) {
-				console.log(v,k);
+				//console.log(v,k);
     			$cookies.remove(k);
 			});		
 			
@@ -147,11 +147,11 @@ var app = angular.module('EmailCampaignManager', [
     			var name = equals > -1 ? cookies[i].substr(0, equals) : cookies[i];
     			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 			}
-				//console.log(document.cookie);
+			console.log(document.cookie);
 			
 			$rootScope.User = null;
 			//$location.path('login.php');
-			window.location.href = 'logout.php';
+			window.location.href = 'server/logout.php';
 		};
 		//$rootScope.Logout();
 		$rootScope.Header = function(){

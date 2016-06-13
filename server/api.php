@@ -89,18 +89,12 @@ class Login
 	static function GetCurrentUser()
 	{
 		$user = null;
-		
-		//Logger::Write(session_id(),4);
-				
+						
 		session_start();
-		Logger::Write(session_id());
 		if(session_id())
-			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".session_id()."'");	
-		Logger::Write($user);
+			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".session_id()."'");			
 		if(!$user and array_key_exists('permanent_session_id', $_COOKIE))
-			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".addslashes($_COOKIE['permanent_session_id'])."'");
-	
-		Logger::Write($user);
+			$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".addslashes($_COOKIE['permanent_session_id'])."'");	
 		if(!$user and array_key_exists('UserName', $_REQUEST))
 			$user = Db::GetRowArray("SELECT * FROM users WHERE name='".addslashes($_REQUEST['UserName'])."' AND password='".addslashes($_REQUEST['Password'])."'");
 		
@@ -108,7 +102,7 @@ class Login
 			return null;
 			
 		if(!array_key_exists('User', $_SESSION))
-		{			
+		{
 	    	Db::Query("UPDATE users SET _session_id='".session_id()."' WHERE id=".$user['id']);
         	if(array_key_exists('RememberMe', $_REQUEST)) 
         		setcookie("permanent_session_id", session_id(), time() + 360*24*3600, "/");        		
