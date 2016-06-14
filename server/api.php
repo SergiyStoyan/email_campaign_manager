@@ -7,7 +7,9 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+ 
 include_once("constants.php");
 include_once("common/logger.php");
 Logger::Set(Constants::LogDirectory);

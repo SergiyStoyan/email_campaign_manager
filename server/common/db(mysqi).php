@@ -50,7 +50,7 @@ class Db
 	public static function RemoveConnection($connection_name=null) 
 	{
 		$db_link = self::get_link($connection_name);
-		mysql_close($db_link) or Logger::Quit("Cound not close db connection: $db_link", Tracer::GetCallerNumber(__FILE__));
+		mysqli_close($db_link) or Logger::Quit("Cound not close db connection: $db_link", Tracer::GetCallerNumber(__FILE__));
 		unset(self::$connections[$connection_name]);
 	}
 	
@@ -60,17 +60,17 @@ class Db
 		if(isset($c['db_link']))
 		{
 			$db_link = $c['db_link'];
-			if(!mysql_ping($db_link))
+			if(!mysqli_ping($db_link))
 			{
-				mysql_close($db_link) or Logger::Quit("Cound not close db connection: $db_link", Tracer::GetCallerNumber(__FILE__));
-				$db_link = mysql_connect($c['db_host'], $c['db_user'], $c['db_password']) or Logger::Quit("Host:'".$c['db_host']."' User:'".$c['db_user']."'\n", Tracer::GetCallerNumber(__FILE__));
+				mysqli_close($db_link) or Logger::Quit("Cound not close db connection: $db_link", Tracer::GetCallerNumber(__FILE__));
+				$db_link = mysqli_connect($c['db_host'], $c['db_user'], $c['db_password']) or Logger::Quit("Host:'".$c['db_host']."' User:'".$c['db_user']."'\n", Tracer::GetCallerNumber(__FILE__));
 			}
 		}
 		else
 		{
-			$db_link = mysql_connect($c['db_host'], $c['db_user'], $c['db_password']) or Logger::Quit("Host:'".$c['db_host']."' User:'".$c['db_user']."'\n", Tracer::GetCallerNumber(__FILE__));
+			$db_link = mysqli_connect($c['db_host'], $c['db_user'], $c['db_password']) or Logger::Quit("Host:'".$c['db_host']."' User:'".$c['db_user']."'\n", Tracer::GetCallerNumber(__FILE__));
 		}
-		mysql_select_db($db_link, $c['db_name']) or Logger::Quit("Could not select database '".$c['db_name']."'", Tracer::GetCallerNumber(__FILE__));
+		mysqli_select_db($db_link, $c['db_name']) or Logger::Quit("Could not select database '".$c['db_name']."'", Tracer::GetCallerNumber(__FILE__));
 		self::$connections[$connection_name]['db_link'] = $db_link;		
 		//Logger::Write("Db connection set: $connection_name", null, Tracer::GetCallerNumber(__FILE__));
 		//Logger::Write("Db connection set: $connection_name");
@@ -87,25 +87,25 @@ class Db
 	static public function Query($sql, $connection_name=null)
 	{
 		$db_link = self::get_link($connection_name);
-		$result = mysql_query($db_link, $sql);
+		$result = mysqli_query($db_link, $sql);
 		if(!$result)
 		{
-			switch(mysql_errno($db_link))
+			switch(mysqli_errno($db_link))
 			{
 				case 1205:
-					if(Tracer::GetRecursionDepth() > 9)	Logger::Quit(mysql_error($db_link), Tracer::GetCallerNumber(__FILE__));
-					Logger::Error(mysql_error($db_link)."\nRestarting SQL:".substr($sql, 0, 50)."<...>", Tracer::GetCallerNumber(__FILE__));
+					if(Tracer::GetRecursionDepth() > 9)	Logger::Quit(mysqli_error($db_link), Tracer::GetCallerNumber(__FILE__));
+					Logger::Error(mysqli_error($db_link)."\nRestarting SQL:".substr($sql, 0, 50)."<...>", Tracer::GetCallerNumber(__FILE__));
 					return self::Query($sql, $connection_name);					
 					break;
 				case 2006:
 				case 2013:
-					if(Tracer::GetRecursionDepth() > 3)	Logger::Quit(mysql_error($db_link), Tracer::GetCallerNumber(__FILE__));
-					Logger::Error(mysql_error($db_link)."\nRe-establishing connection...", Tracer::GetCallerNumber(__FILE__));
+					if(Tracer::GetRecursionDepth() > 3)	Logger::Quit(mysqli_error($db_link), Tracer::GetCallerNumber(__FILE__));
+					Logger::Error(mysqli_error($db_link)."\nRe-establishing connection...", Tracer::GetCallerNumber(__FILE__));
 					self::init_connection($connection_name);
 					return self::Query($sql, $connection_name);					
 					break;
 				default:
-					Logger::Quit(mysql_error($db_link)."\nSQL:$sql", Tracer::GetCallerNumber(__FILE__));
+					Logger::Quit(mysqli_error($db_link)."\nSQL:$sql", Tracer::GetCallerNumber(__FILE__));
 			}
 		}
 		return $result;
@@ -114,15 +114,15 @@ class Db
 	/*static public function UnbufferedQuery($sql, $connection_name=null)
 	{
 		$connection_name or $connection_name = self::DEFAULT_CONNECTION_NAME;
-		$result = mysql_unbuffered_query($sql, $db_link);
+		$result = mysqli_unbuffered_query($sql, $db_link);
 		if(!$result)
 		{
-			if(mysql_errno($db_link) == 1205)
+			if(mysqli_errno($db_link) == 1205)
 			{
-				Logger::Error(mysql_error($db_link)."\nRestarting SQL:".substr($sql, 0, 50)."<...>", self::get_caller_number());
+				Logger::Error(mysqli_error($db_link)."\nRestarting SQL:".substr($sql, 0, 50)."<...>", self::get_caller_number());
 				return self::UnbufferedQuery($sql, $db_link);
 			}
-			Logger::Quit(mysql_error($db_link)."\nSQL:$sql", self::get_caller_number());
+			Logger::Quit(mysqli_error($db_link)."\nSQL:$sql", self::get_caller_number());
 		}
 		return $result;
 	}*/
@@ -130,22 +130,22 @@ class Db
 	static public function LastAffectedRows($connection_name=null)
 	{
 		$db_link = self::get_link($connection_name);
-		return mysql_affected_rows($db_link);
+		return mysqli_affected_rows($db_link);
 	}
 
 	static public function GetRowArray($sql, $connection_name=null)
 	{
 		$result = self::Query($sql, $connection_name);
-		$array = mysql_fetch_assoc($result);		
-		mysql_free_result($result);
+		$array = mysqli_fetch_assoc($result);		
+		mysqli_free_result($result);
 		return $array;
 	}
 
 	static public function GetSingleValue($sql, $connection_name=null)
 	{
 		$result = self::Query($sql, $connection_name);
-		$r = mysql_fetch_row($result);		
-		mysql_free_result($result);
+		$r = mysqli_fetch_row($result);		
+		mysqli_free_result($result);
 		if(!$r) return null;
 		return $r[0];
 	}
@@ -154,8 +154,8 @@ class Db
 	{
 		$array = array();
 		$result = Db::Query($sql, $connection_name);	
-		while($a = mysql_fetch_row($result)) $array[] = $a[0];
-		mysql_free_result($result);	
+		while($a = mysqli_fetch_row($result)) $array[] = $a[0];
+		mysqli_free_result($result);	
 		return $array;
 	}
 
@@ -163,8 +163,8 @@ class Db
 	{
 		$array = array();
 		$result = Db::Query($sql, $connection_name);	
-		while($a = mysql_fetch_assoc($result)) $array[] = $a;
-		mysql_free_result($result);	
+		while($a = mysqli_fetch_assoc($result)) $array[] = $a;
+		mysqli_free_result($result);	
 		return $array;
 	}
 	
@@ -182,8 +182,8 @@ class Db
 		$result = Db::Query($sql, $connection_name);
 		if($result === true) return self::LastAffectedRows($connection_name);
 		$rs = array();	
-		while($a = mysql_fetch_assoc($result)) $rs[] = $a;
-		mysql_free_result($result);	
+		while($a = mysqli_fetch_assoc($result)) $rs[] = $a;
+		mysqli_free_result($result);	
 		return $rs;		
 	}
 	
@@ -195,7 +195,7 @@ class Db
 	
 	static public function EscapeString($string, $connection_name=null)
 	{
-		return mysql_real_escape_string(self::get_link($connection_name), $string);
+		return mysqli_real_escape_string(self::get_link($connection_name), $string);
 	}
 }
 
