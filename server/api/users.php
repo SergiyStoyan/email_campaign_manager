@@ -16,6 +16,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
 	case 'GetTableData':
+  		if(Login::UserType() != 'admin')
+  			Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
 	  	Respond(DataTable::FetchData(
 	  		[
 	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
