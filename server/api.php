@@ -204,6 +204,14 @@ class Login
 		return $user['id'];
 	}
 	
+	public static function UserType()
+	{
+		$user = self::GetCurrentUser();
+		if(!$user)
+			return null;
+		return $user['type'];
+	}
+	
 	public static function Logout()
 	{
 		if(!session_id())	

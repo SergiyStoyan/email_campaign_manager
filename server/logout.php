@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //********************************************************************************************
 //Author: Sergey Stoyan, CliverSoft.com
 //        http://cliversoft.com
@@ -8,9 +8,10 @@
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
 
-include_once("api.php");
+if(!session_id())	
+	session_start();
 
+include_once("api.php");
 Login::Logout();
 header("Location: ../");
-
 ?>

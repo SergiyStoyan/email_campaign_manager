@@ -27,15 +27,27 @@ switch ($action)
 	  	);
     return;
   	case 'Add':
+  		if(Login::UserType() != 'admin')
+  			Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
   		Respond(DataTable::Insert('users', $_POST));
     return;
   	case 'GetByKeys':
+  		if(Login::UserType() != 'admin' and Login::UserId() != $_POST['id'])
+  			Respond(null, "User of type '".Login::UserType()."' cannot do this operation for another user.");
   		Respond(DataTable::GetByKeys('users', $_POST));
     return;
   	case 'Save':
+  		if(Login::UserType() != 'admin' and Login::UserId() != $_POST['id'])
+  			Respond(null, "User of type '".Login::UserType()."' cannot do this operation for another user.");
+  		if(Login::UserId() == $_POST['id'] and Login::UserType() != $_POST['type'])
+  			Respond(null, "You cannot change user type to yourself.");
   		Respond(DataTable::Save('users', $_POST));
     return;
   	case 'Delete':
+  		if(Login::UserType() != 'admin' and Login::UserId() != $_POST['id'])
+  			Respond(null, "User of type '".Login::UserType()."' cannot do this operation for another user.");
+  		if(Login::UserId() == $_POST['id'])
+  			Respond(null, "You cannot delete own account.");
   		Respond(DataTable::Delete('users', $_POST));
     return;
 	default:
