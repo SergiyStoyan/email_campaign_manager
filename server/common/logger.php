@@ -22,10 +22,27 @@ class Logger
 	static private $log = false;
 	static private $log_dir = false;
 
-	static public function Init($log_dir=null, $delete_logs_older_than_days=10, $time_zone='Europe/London')
+	static public function Set($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
+	{	
+		self::$_log_dir = $log_dir;
+		self::$_delete_logs_older_than_days = $delete_logs_older_than_days;
+		self::$_time_zone = $time_zone;
+	}
+	static private $_log_dir = null;
+	static private $_delete_logs_older_than_days = 10;
+	static private $_time_zone = 'Europe/London';
+	
+	static public function Init($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
 	{
 		if(self::$initiated) return;
 		self::$initiated = true;	
+		
+		if(self::$_log_dir)	
+		{
+			$log_dir = self::$_log_dir;
+			$delete_logs_older_than_days = self::$_delete_logs_older_than_days;
+			$time_zone = self::$_time_zone;				
+		}
 		
 		if(!self::$WriteToLog) return;
 

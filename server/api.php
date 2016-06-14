@@ -8,7 +8,9 @@
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
 
+include_once("constants.php");
 include_once("common/logger.php");
+Logger::Set(Constants::LogDirectory);
 include_once("common/db.php");
 	
 function Respond($data, $error=null)
