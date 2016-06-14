@@ -24,9 +24,9 @@ class Logger
 
 	static public function Set($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
 	{	
-		self::$_log_dir = $log_dir;
-		self::$_delete_logs_older_than_days = $delete_logs_older_than_days;
-		self::$_time_zone = $time_zone;
+		if($log_dir) self::$_log_dir = $log_dir;
+		if($delete_logs_older_than_days) self::$_delete_logs_older_than_days = $delete_logs_older_than_days;
+		if($time_zone) self::$_time_zone = $time_zone;
 	}
 	static private $_log_dir = null;
 	static private $_delete_logs_older_than_days = 10;

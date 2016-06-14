@@ -70,7 +70,7 @@ class Db
 		{
 			$db_link = mysql_connect($c['db_host'], $c['db_user'], $c['db_password']) or Logger::Quit("Host:'".$c['db_host']."' User:'".$c['db_user']."'\n", Tracer::GetCallerNumber(__FILE__));
 		}
-		mysql_select_db($db_link, $c['db_name']) or Logger::Quit("Could not select database '".$c['db_name']."'", Tracer::GetCallerNumber(__FILE__));
+		mysql_select_db($c['db_name'], $db_link) or Logger::Quit("Could not select database '".$c['db_name']."'", Tracer::GetCallerNumber(__FILE__));
 		self::$connections[$connection_name]['db_link'] = $db_link;		
 		//Logger::Write("Db connection set: $connection_name", null, Tracer::GetCallerNumber(__FILE__));
 		//Logger::Write("Db connection set: $connection_name");
@@ -87,7 +87,7 @@ class Db
 	static public function Query($sql, $connection_name=null)
 	{
 		$db_link = self::get_link($connection_name);
-		$result = mysql_query($db_link, $sql);
+		$result = mysql_query($sql, $db_link);
 		if(!$result)
 		{
 			switch(mysql_errno($db_link))
