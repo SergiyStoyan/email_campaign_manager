@@ -42,16 +42,10 @@ var Cliver = {
 	            duration: 400
 	        }
 	    });
-		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", false);
 	    
 	    Cliver.ArrangeDialogWindow(e);
 	    return e;
-	},
-	
-	_RemoveRoundedCorners: function(e){
-		e.closest('.ui-dialog').removeClass('ui-corner-all');
-		e.closest('.ui-dialog').find('*').removeClass('ui-corner-all');
 	},
 
 	ShowError: function(content, title) {
@@ -85,7 +79,6 @@ var Cliver = {
 	            duration: 400
 	        }
 	    });
-		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", false);
 
 	    Cliver.ArrangeDialogWindow(e);
@@ -243,10 +236,10 @@ var Cliver = {
 	    	    
 	    var content_e;
 	    if (definition.content_div_id) {
-	        content_e = $("#" + definition.content_div_id).clone();
-	        content_e.uniqueId();
+	        //content_e = $("#" + definition.content_div_id).clone();
+	        content_e = $($("#" + definition.content_div_id).html());
+	        //content_e.uniqueId();
 	        content_e.addClass("_content");
-	        content_e.show();    	
 	    	e.append(content_e);
 	    	var parent_e = $("#" + definition.content_div_id).parent();
 	    	parent_e.append(e);
@@ -259,6 +252,7 @@ var Cliver = {
 			}    		
 	    	parent_e.uniqueId();
 	    	definition.dialog.appendTo = '#' + parent_e.attr('id');
+	        content_e.show();    	
 	        //console.log(parent_e.attr('id'));
 	    }
 	    else {
@@ -268,7 +262,6 @@ var Cliver = {
 	    }
 	            
 	    e.dialog(definition.dialog);
-		Cliver._RemoveRoundedCorners(e);
 	    e.dialog().dialog("widget").draggable("option", "containment", [-2000, 0, 2000, 1000]);
 
 	    if (definition.background) {
