@@ -9,9 +9,18 @@
 //********************************************************************************************
 
 include_once("../api.php");
-
-if(Login::GetCurrentUser())
-	Respond(Login::GetCurrentUser());
-else
-  	Respond(null, 'The user is not identified. Please provide correct login info.');
+  	
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+switch ($action) 
+{
+  	case 'GetCurrentUser':
+  		Respond(Login::GetCurrentUser());
+    return;
+	default:
+		if(Login::GetCurrentUser())
+			Respond(Login::GetCurrentUser());
+		else
+  			Respond(null, 'The user is not identified. Please provide correct login info.');
+	return;
+}
 ?>

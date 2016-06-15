@@ -120,14 +120,35 @@ var app = angular.module('EmailCampaignManager', [
 				
 		$rootScope.Authorized = function(page) {
 			return LoginService.Authorized();
-		};
-				
-		var user_type = $cookies.get('user_type');
-		if(user_type)
-			$rootScope.User = {type: user_type};//to display menu when reloading page
-		else
-			$rootScope.User = null;
+		};				
 												 
+		$rootScope.User = function(){
+			if(!user)
+				$.ajax({
+		            type: 'POST',
+		            url: 'server/api/login.php?action=GetCurrentUser',
+		            data: null,
+					async: false,
+		            success: function (data) {
+		                if (typeof(data) == 'string') {
+		                	Cliver.ShowError(data);
+		                    return;
+		                }
+			        	else if (data._ERROR) {
+			               	Cliver.ShowError(data._ERROR);
+			                return;
+			            }
+			            user = data;
+			            console.log(user);
+		            },
+		            error: function (xhr, error) {
+		                Cliver.ShowError(xhr.responseText);
+		            }
+		        });			
+			return user;
+		}
+		var user;
+					 
 		$rootScope.Logout = function(){
 			//does not work!
 			var cookies = $cookies.getAll();

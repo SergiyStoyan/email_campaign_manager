@@ -26,7 +26,7 @@ app.controller('LoginController',
 					}
 					else{
                     	$location.path('/campaigns');
-						$rootScope.User = data;
+						//$rootScope.User = data;
 					}
 	            },
 	            error: function (xhr, error) {

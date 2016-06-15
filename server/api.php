@@ -167,7 +167,7 @@ class Login
 			session_start();
         unset($user['password']);
         $_SESSION['User'] = $user;		
-        setcookie("user_type", $user['type'], time() + 360*24*3600, "/");
+        //setcookie("user_type", $user['type'], time() + 360*24*3600, "/");
 		
 		return $_SESSION['User'];	
 	}
@@ -229,7 +229,7 @@ class Login
 			session_destroy();
 		//Logger::Write(444);Logger::Write();
 		setcookie("permanent_session_id", "", 1, "/");        		
-		setcookie("user_type", "", 1, "/");
+		//setcookie("user_type", "", 1, "/");
 	}
 }
 

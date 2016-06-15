@@ -225,6 +225,13 @@ border-top: none;
     text-decoration: none;
 }
 
+.Menu li p {
+    display: block;
+    text-align: center;
+    padding: 0px 16px;
+    text-decoration: none;
+}
+
 .Menu li a:hover {
     background-color: #356;
     color1: #ff9;
