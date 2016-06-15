@@ -216,33 +216,14 @@ var Cliver = {
 	    
 	    if (!definition.dialog.close)
 	        definition.dialog.close = definition.on_close;
-	    
-	    /*if (definition.content_div_id) {  		
-	        content_e = $("#" + definition.content_div_id);
-	        var old_e = content_e.parent();
-	        if (old_e.hasClass('ui-dialog-content')){
-	        	console.log(old_e);
-	            var g = old_e.dialog();
-	        	console.log(g);
-	            return old_e;
-	        }
-	    }*/
-
-	    var html = '<div><div class="_loading" style="height:100%;width:100%;position:absolute;z-index:10;display:none;background-color:white;"><img src="' + Cliver.ProcessingImageSrc + '" style="display:block;margin:auto;position:relative;top:50%;transform:translateY(-50%);"/></div></div>';
-	    var e = $(html);
-	    e.definition = definition;
-	    //actually defintion's functions are using the object where they are defined, so dialog is to be passed there!
-	    definition_._e = e;
-	    	    
-	    var content_e;
+	    	    	    
+	    var e;
 	    if (definition.content_div_id) {
 	        //content_e = $("#" + definition.content_div_id).clone();
-	        content_e = $($("#" + definition.content_div_id).html());
-	        //content_e.uniqueId();
-	        content_e.addClass("_content");
-	    	e.append(content_e);
+	        e = $($("#" + definition.content_div_id).html());
 	    	var parent_e = $("#" + definition.content_div_id).parent();
-	    	parent_e.append(e);
+	    	//parent_e.append(e);
+	    	//e.uniqueId();
 	    	var angular_controller_e = e.closest('[ng-controller]');
 	    	if(angular_controller_e.length){				
 	    		angular.element(angular_controller_e).injector().invoke(function($compile) {
@@ -252,14 +233,17 @@ var Cliver = {
 			}    		
 	    	parent_e.uniqueId();
 	    	definition.dialog.appendTo = '#' + parent_e.attr('id');
-	        content_e.show();    	
-	        //console.log(parent_e.attr('id'));
 	    }
 	    else {
-	        content_e = $('<div class="_content"></div>');
-	    	e.append(content_e);	    	
-	    	$("body").append(e);
+	        e = $('<div></div>');
+	    	//e.uniqueId();
 	    }
+	    e.append('<div class="_loading" style="height:100%;width:100%;position:absolute;top:0;left:0;right:0;bottom:0;z-index:1000;display:none;background-color: white;"><img src="' + Cliver.ProcessingImageSrc + '" style="display:block;margin:auto;position:relative;top:50%;transform:translateY(-50%);"/></div>');	    
+	    e.show();    
+	    
+	    e.definition = definition;
+	    //actually defintion's functions are using the object where they are defined, so dialog is to be passed there!
+	    definition_._e = e;
 	            
 	    e.dialog(definition.dialog);
 	    e.dialog().dialog("widget").draggable("option", "containment", [-2000, 0, 2000, 1000]);
@@ -271,10 +255,14 @@ var Cliver = {
 	    }
 
 	    e.show_processing = function (show) {
-	        if (show || show === undefined)
+	        if (show || show === undefined) {
 	            e.find("._loading").show();
-	        else 
+	            //e.find("._content").css('visibility', 'hidden');
+	        }
+	        else {
 	            e.find("._loading").hide();
+	            //e.find("._content").css('visibility', 'visible');
+	        }
 	    }
 	    
 	    e.title = function (html) {
@@ -283,11 +271,11 @@ var Cliver = {
 	        e.parent().find(".ui-dialog-title").html(html);
 	    }
 
-	    e.content = function (html) {
+	    /*e.content = function (html) {
 	        if (html == undefined)
 	            return e.find("._content").html();
 	        e.find("._content").html(html);
-	    }
+	    }*/
 
 	    e.getContentByAjax = function (ajax_config, on_success) {
 	        if (ajax_config["type"] == undefined)
