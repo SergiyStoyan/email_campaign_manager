@@ -168,13 +168,13 @@ class Login
 	
 	static function GetCurrentUser()
 	{
-		if($user = self::get_current_user())
+	/*	if($user = self::get_current_user())
 			return $user;
 		Respond(null, "No user identified.");
 	}
 	
 	static private function get_current_user()
-	{
+	{*/
 		if(isset($_REQUEST['UserName']))
 			return self::Identify();
 					

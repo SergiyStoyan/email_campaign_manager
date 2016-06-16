@@ -21,7 +21,7 @@ app.controller('LoginController',
 			        	Cliver.ShowError(data.Error);
 			            return;
 			        }
-			        $rootScope.User(true);//to fill user
+					$rootScope.SetUser();//to fill user
                     $location.path('/campaigns');
 	            },
 	            error: function (xhr, error) {

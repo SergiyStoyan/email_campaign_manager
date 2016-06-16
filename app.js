@@ -121,37 +121,36 @@ var app = angular.module('EmailCampaignManager', [
 			return LoginService.Authorized();
 		};				
 												 
-		$rootScope.User = function(update=false){
-			if(!user || update){
-				user = {
-					name:'',
-					type:'',
-				};
-				$.ajax({
-		            type: 'POST',
-		            url: 'server/api/login.php?action=GetCurrentUser',
-		            data: null,
-					//async: false,
-		            success: function (data) {
-			            //console.log(data);
-		                if (data.Error) {
-		                	//Cliver.ShowError(data.Error);
-							if($location.path() != '/login')
-		    					$location.path('/login');
-		                    return;
-		                }
-            			$rootScope.$apply(function(){user = data.Data;});
-			            //user = data.Data;
-            			//$rootScope.$apply();
-		            },
-		            error: function (xhr, error) {
-		                Cliver.ShowError(xhr.responseText + "<br>" + error);
-		            }
-		        });
-			}
+		$rootScope.User = function(){ 
 			return user;
 		}
-		var user = false;
+		var user;
+		$rootScope.SetUser = function(){
+			user = {
+				name:'',
+				type:'',
+			};//set while it is getting
+			$.ajax({
+		        type: 'POST',
+		        url: 'server/api/login.php?action=GetCurrentUser',
+		        data: null,
+				//async: false,
+		        success: function (data) {
+		            //console.log(data);
+		            if (data.Error) {
+		            	Cliver.ShowError(data.Error);
+						if($location.path() != '/login')
+							$location.path('/login');
+		                return;
+		            }
+        			$rootScope.$apply(function(){user = data.Data;});
+		        },
+		        error: function (xhr, error) {
+		            Cliver.ShowError(xhr.responseText + "<br>" + error);
+		        }
+		    });
+		}
+		$rootScope.SetUser();
 					 
 		$rootScope.Logout = function(){
 			//does not work!
