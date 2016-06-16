@@ -1,5 +1,31 @@
 var Cliver = {	
 	
+	/*Request: function (url, data, callback) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function (data) {
+            	$scope.$apply();
+        		//console.log(data);
+            	if(typeof(data) == 'string'){
+            		Cliver.ShowError(data);
+				}
+				else if(data._ERROR){
+            		Cliver.ShowError(data._ERROR);
+				}
+				else{
+                	$location.path('/campaigns');
+					//$rootScope.User = data;
+				}
+            },
+            error: function (xhr, error) {
+                console.log(error, xhr);
+            	Cliver.ShowError(xhr.responseText + "<br>" + error);
+            }
+        });
+	},*/
+		
 	UpdateQueryStringParameter: function (uri, key, value) {		
 		var r = new RegExp('([?&])' + key + '(=[^&#]*)?', 'ig');
     	var u = uri.replace(r, '$1' + key + "=" + value);
@@ -404,14 +430,10 @@ var Cliver = {
 	                        data: data,
 	                        success: function (data) {
 	                            e.show_processing(false);
-	                            if (typeof(data) == 'string') {
-	                            	Cliver.ShowError(data);
-	                                return;
-	                            }
-		                    	else if (data._ERROR) {
-		                           	Cliver.ShowError(data._ERROR);
-		                            return;
-		                        }
+				                if (data.Error) {
+				                	Cliver.ShowError(data.Error);
+				                    return;
+				                }
 	                            e.close();	                                
 	                            if(on_ok_success)
 	                              	on_ok_success();
@@ -442,19 +464,15 @@ var Cliver = {
 		                url: get_data_url,
 		                data: get_data_parameters,
 		                success: function (data) {
-	                    	if (typeof(data) == 'string') {
-	                           	Cliver.ShowError(data);
-	                            return;
-	                        }
-	                    	else if (data._ERROR) {
-	                           	Cliver.ShowError(data._ERROR);
-	                            return;
-	                        }
+			                if (data.Error) {
+			                	Cliver.ShowError(data.Error);
+			                    return;
+			                }
 		                   
 		                    var angular_controller_e = content_div_e.closest('[ng-controller]');  
 							var angular_controller_scope = angular.element(angular_controller_e).scope();
 		                    angular_controller_scope.$apply(function() {
-	    						angular_controller_scope.Data = data;
+	    						angular_controller_scope.Data = data.Data;
 	  						});
 	  						
 		                    e.show_processing(false);
@@ -589,15 +607,11 @@ var Cliver = {
 				                    url: Cliver.UpdateQueryStringParameter(table.definition.server.request_path, 'action', 'Delete'), 
 				                    data: parameters,
 				                    success: function (data) {
-				                        e.show_processing(false);
-				                        if (typeof(data) == 'string') {
-				                        	Cliver.ShowError(data);
-				                            return;
-				                        }
-					                	else if (data._ERROR) {
-					                       	Cliver.ShowError(data._ERROR);
-					                        return;
-					                    }
+						                if (data.Error) {
+						                	Cliver.ShowError(data.Error);
+						                    return;
+						                }
+						                
 				                        e.close();
 				                        if (table.definition.server)
 	                            			table.api().draw(false);
@@ -685,15 +699,18 @@ var Cliver = {
 	                url: Cliver.UpdateQueryStringParameter(definition.server.request_path, 'action', 'GetTableData'),// + definition.server.actions_prefix,
 	                data: data,
 	                success: function (data) {
-	                    if ($.type(data) == 'string') {
-	                        Cliver.ShowError(data);
-	                        data = { draw: 0, recordsTotal: 0, recordsFiltered: 0, data: [] };
+	                    if (data.Error) {
+	                        Cliver.ShowError(data.Error);
+	                        if(data.Data)
+	                        	data = data.Data;
+	                        else
+	                        	data = { draw: 0, recordsTotal: 0, recordsFiltered: 0, data: [] };
 	                    }
-	                    callback(data);
+	                    callback(data.Data);
 	                },
 	                error: function (xhr, error) {
 	                    console.log(error, xhr);
-	                    Cliver.ShowError(xhr.responseText);
+	                    Cliver.ShowError(xhr.responseText + '<br>' + error);
 	                }
 	            });
 	        }

@@ -17,17 +17,12 @@ app.controller('LoginController',
 	            success: function (data) {
            			$scope.dataLoading = false;
                 	$scope.$apply();
-            		//console.log(data);
-	            	if(typeof(data) == 'string'){
-                		Cliver.ShowError(data);
-					}
-					else if(data._ERROR){
-                		Cliver.ShowError(data._ERROR);
-					}
-					else{
-                    	$location.path('/campaigns');
-						//$rootScope.User = data;
-					}
+			        if (data.Error) {
+			        	Cliver.ShowError(data.Error);
+			            return;
+			        }
+			        $rootScope.User(true);//to fill user
+                    $location.path('/campaigns');
 	            },
 	            error: function (xhr, error) {
 	                console.log(error, xhr);

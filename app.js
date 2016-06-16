@@ -4,7 +4,6 @@
 //- mount html editor
 //- add testing servers
 //- unite edit forms 
-//- processing div in dialog append as a child
 
 
 Cliver.ProcessingImageSrc = 'images/ajax-loader.gif';
@@ -77,7 +76,7 @@ var app = angular.module('EmailCampaignManager', [
             //console.log(next);
         });
 		
-        $rootScope.$on('$routeChangeStart', function (event, next, prev) { 
+        $rootScope.$on('$routeChangeStart', function (event, next, prev) {         	
             if ($location.path() == '/logout')
             	LoginService.ClearCredentials();
             //console.log(next, prev);
@@ -122,32 +121,37 @@ var app = angular.module('EmailCampaignManager', [
 			return LoginService.Authorized();
 		};				
 												 
-		$rootScope.User = function(){
-			if(!user)
+		$rootScope.User = function(update=false){
+			if(!user || update){
+				user = {
+					name:'',
+					type:'',
+				};
 				$.ajax({
 		            type: 'POST',
 		            url: 'server/api/login.php?action=GetCurrentUser',
 		            data: null,
-					async: false,
+					//async: false,
 		            success: function (data) {
-		                if (typeof(data) == 'string') {
-		                	Cliver.ShowError(data);
+			            //console.log(data);
+		                if (data.Error) {
+		                	//Cliver.ShowError(data.Error);
+							if($location.path() != '/login')
+		    					$location.path('/login');
 		                    return;
 		                }
-			        	else if (data._ERROR) {
-			               	Cliver.ShowError(data._ERROR);
-			                return;
-			            }
-			            user = data;
-			            console.log(user);
+            			$rootScope.$apply(function(){user = data.Data;});
+			            //user = data.Data;
+            			//$rootScope.$apply();
 		            },
 		            error: function (xhr, error) {
-		                Cliver.ShowError(xhr.responseText);
+		                Cliver.ShowError(xhr.responseText + "<br>" + error);
 		            }
-		        });			
+		        });
+			}
 			return user;
 		}
-		var user;
+		var user = false;
 					 
 		$rootScope.Logout = function(){
 			//does not work!

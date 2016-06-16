@@ -1,9 +1,9 @@
 ﻿<nav ng-controller="MenuController" ng-init="Initialize()" class="Menu">
 	<ul>
-		<li ng-if="User()"><a href="#servers">Servers</a></li>
-		<li ng-if="User()"><a href="#email_lists">Email Lists</a></li>
-		<li ng-if="User()"><a href="#campaigns">Campaigns</a></li>
-		<li ng-if="User()"><a href="#templates">Templates</a></li>
+		<li ng-if="User().type"><a href="#servers">Servers</a></li>
+		<li ng-if="User().type"><a href="#email_lists">Email Lists</a></li>
+		<li ng-if="User().type"><a href="#campaigns">Campaigns</a></li>
+		<li ng-if="User().type"><a href="#templates">Templates</a></li>
 		<li ng-if="User().type == 'admin'"><a href="#users">Users</a></li>
 	</ul>
 </nav>

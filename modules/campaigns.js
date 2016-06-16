@@ -24,11 +24,11 @@ app.controller('CampaignsController',
 		            url: $rootScope.ApiUrl($route) + '?action=GetOptions',
 		            data: {},
 		            success: function (data) {
-		            	if(typeof(data) == 'string')
-		            		Cliver.ShowError(data);
-	                	else if(data._ERROR)
-		            		Cliver.ShowError(data._ERROR);		            		
-		            	$scope.Options = data;
+			            if (data.Error) {
+			            	Cliver.ShowError(data.Error);
+			                return;
+			            }	            		
+		            	$scope.Options = data.Data;
 		            	//console.log($scope.Options);
                 		$scope.$apply();
 		            },

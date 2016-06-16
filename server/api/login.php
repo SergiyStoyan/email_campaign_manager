@@ -17,10 +17,10 @@ switch ($action)
   		Respond(Login::GetCurrentUser());
     return;
 	default:
-		if(Login::GetCurrentUser())
-			Respond(Login::GetCurrentUser());
+		if($user = Login::Identify())
+			Respond($user);
 		else
-  			Respond(null, 'The user is not identified. Please provide correct login info.');
+  			Respond(null, 'The user could not be identified. Please try again.');
 	return;
 }
 ?>
