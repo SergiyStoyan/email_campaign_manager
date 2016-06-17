@@ -38,10 +38,7 @@ app.controller('ServersController',
 		        },
             	datatable: {
 	                drawCallback: function (settings) {
-	                	var d = table_Servers.api().rows().data();
-	                	for (var i in d)
-							mark_testing_row(d[i][0]);
-	                	
+						mark_rows();	                	
 	                    table_Servers.api().columns.adjust();
 	                },
 	            },
@@ -49,32 +46,39 @@ app.controller('ServersController',
 		    table_Servers = Cliver.InitTable(definition);
 		}
 		
-		function mark_testing_row(id){				
+		function mark_rows(){				
             var d = table_Servers.api().rows().data();
-            for (var i in d) {
-                if (d[i][0] == id) {                
-					var class_;	
-					if(testing_server_ids2state[id])
-						class_ = 'TestingServer';
-					else {
-						switch(d[i][2]){
-							case 'dead':
-								class_ = 'DeadServer';
-							break;
-							case 'active':
-								class_ = 'ActiveServer';
-							break;
-						}
-					}                	
-                	table_Servers.find('tbody tr:eq(' + i +')').addClass(class_);
-                    return;
-                }
+            for (var i in d) {  
+            	if(Number(i) === i)
+            		continue;
+            	var row = table_Servers.find('tbody tr:eq(' + i +')');
+				console.log(d[i][0]);
+				if(testing_server_ids2state[d[i][0]])
+				{
+					row.removeClass('ActiveServer');
+					row.removeClass('DeadServer');
+					row.addClass('TestingServer');
+				}
+				else {
+					switch(d[i][2]){
+						case 'dead':
+							row.removeClass('ActiveServer');
+							row.removeClass('TestingServer');
+							row.addClass('DeadServer');
+						break;
+						case 'active':
+							row.removeClass('DeadServer');
+							row.removeClass('TestingServer');
+							row.addClass('ActiveServer');
+						break;
+					}
+				}   
             }
 		}
 		
 		function test_server(id){			
 			testing_server_ids2state[id] = 1;
-			mark_testing_row(id);
+			mark_rows();
 			Cliver.Ajax.Request($rootScope.ApiUrl($route) + '?action=TestServer', {id: id}, function(data){
 				testing_server_ids2state[id] = 0;
 				table_Servers.api().draw(false);

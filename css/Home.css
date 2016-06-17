@@ -313,7 +313,7 @@ text-align: center;
 }
 
 table tbody tr.TestingServer{
-	background-color: #21fe64;
+	background-color: #edfc67 !important;
 }
 
 table tbody tr.ActiveServer.even{

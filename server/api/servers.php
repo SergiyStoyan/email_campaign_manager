@@ -65,6 +65,7 @@ switch ($action)
 		}
 		catch(Exception $e)
 		{
+			Logger::Write2("fdsafdsf");
 			Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
 			Respond($e->getMessage());
 		}
