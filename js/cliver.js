@@ -1,7 +1,7 @@
 var Cliver = {	
 	
 	Ajax: {			
-		Request: function (url, data, on_success) {
+		Request: function (url, data, on_success=null) {
             $.ajax({
 	            type: 'POST',
 	            url: url,
@@ -9,7 +9,8 @@ var Cliver = {
 	            success: function (data) {
 					if (Cliver.Ajax.GetError(data)) 
 			            return;
-			        on_success(data.Data);
+			        if(on_success)
+			        	on_success(data.Data);
 	            },
 	            error: function (xhr, error) {
 	                console.log(error, xhr);

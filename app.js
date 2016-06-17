@@ -136,7 +136,7 @@ var app = angular.module('EmailCampaignManager', [
 		        data: null,
 				//async: false,
 		        success: function (data) {
-		            console.log(data);
+		            //console.log(data);
 					if (Cliver.Ajax.GetError(data)) {
 						if($location.path() != '/login')
 							$location.path('/login');

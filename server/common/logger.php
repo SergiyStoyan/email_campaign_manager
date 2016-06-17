@@ -269,7 +269,7 @@ class Logger
 }
 
 register_shutdown_function("Logger::write_last_message");
-set_error_handler("Logger::write_error", error_reporting());		
+set_error_handler("Logger::write_error", error_reporting());
 Logger::$ConsoleIsWebBrowser = Logger::IsRunningInWebContext();	
 
 

@@ -7,9 +7,9 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
- 
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 include_once("constants.php");
 include_once("common/logger.php");
 Logger::Set(Constants::LogDirectory);
@@ -162,6 +162,7 @@ class Login
         unset($user['password']);
         $_SESSION['User'] = $user;		
         //setcookie("user_type", $user['type'], time() + 360*24*3600, "/");
+  		session_write_close(); 
 		
 		return $_SESSION['User'];	
 	}
@@ -175,18 +176,27 @@ class Login
 			session_start();
 		
 		if(isset($_SESSION['User']))
+		{			
+			//should be closed anywhere to prevent a concurrent thread lock!
+  			session_write_close(); 
 			return $_SESSION['User'];
+		}
 		
 		if(!isset($_COOKIE['permanent_login_id']) or strlen($_COOKIE['permanent_login_id']) < 8)
+		{			
+  			session_write_close(); 
 			return null;
+		}
 			
 		if($user = Db::GetRowArray("SELECT * FROM users WHERE _permanent_login_id='".addslashes($_COOKIE['permanent_login_id'])."'"))
 		{
         	unset($user['password']);
         	$_SESSION['User'] = $user;
+  			session_write_close(); 
 			return $_SESSION['User'];	
 		}
-		
+							
+  		session_write_close(); 
 		return null;
 	}
 	

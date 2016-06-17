@@ -41,7 +41,11 @@ switch ($action)
   	case 'Delete':
   		Respond(DataTable::Delete('servers', $_POST));
     return;
-  	case 'TestServer':    
+  	case 'TestServer':    	
+ 		//ftp_connect thows an uncatching error, so it will suppress it
+ 		error_reporting(E_ERROR | E_PARSE); 
+		
+		Db::Query("UPDATE servers SET status='testing', status_time=0 WHERE id=".$_POST['id']);
   	
 		$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$_POST['id']);
 		if(!$server)
@@ -49,23 +53,21 @@ switch ($action)
 	  	
 	  	try
 	  	{
-		  	if($ftp = ftp_connect($server['host'], $server['port']))
+		  	if($ftp = @ftp_connect($server['host'], $server['port']))
 		  	{
-		    	if(!ftp_login($ftp, $server['login'], $server['password']))
+		    	if(!@ftp_login($ftp, $server['login'], $server['password']))
 		    	{
-					ftp_close($ftp);
-					Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
+					@ftp_close($ftp);
 		    		Respond("No login");
 				}
 			
-				ftp_close($ftp);
+				@ftp_close($ftp);
 				Db::Query("UPDATE servers SET status='active', status_time=NOW() WHERE id=".$_POST['id']);
 	  			Respond("ok");	
 			}			
 		}
 		catch(Exception $e)
 		{
-			Logger::Write2("fdsafdsf");
 			Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
 			Respond($e->getMessage());
 		}

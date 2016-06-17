@@ -23,9 +23,7 @@ app.controller('ServersController',
 		                test: {
 		                    text: "Test",
 		                    onclick: function () {
-		                    	//$(definition._table.api().row('.selected').data()[0])
 		                    	test_server(definition._table.api().row('.selected').data()[0]);
-		                    	console.log(definition._table.api().row('.selected').data()[0]);
 		                    	return false;
 		                    },
 		                },
@@ -46,13 +44,12 @@ app.controller('ServersController',
 		    table_Servers = Cliver.InitTable(definition);
 		}
 		
-		function mark_rows(){				
+		function mark_rows(){
             var d = table_Servers.api().rows().data();
             for (var i in d) {  
             	if(Number(i) === i)
             		continue;
             	var row = table_Servers.find('tbody tr:eq(' + i +')');
-				console.log(d[i][0]);
 				if(testing_server_ids2state[d[i][0]])
 				{
 					row.removeClass('ActiveServer');
@@ -70,6 +67,11 @@ app.controller('ServersController',
 							row.removeClass('DeadServer');
 							row.removeClass('TestingServer');
 							row.addClass('ActiveServer');
+						break;
+						case 'testing':
+							row.removeClass('ActiveServer');
+							row.removeClass('DeadServer');
+							row.addClass('TestingServer');
 						break;
 					}
 				}   
