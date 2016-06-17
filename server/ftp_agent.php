@@ -10,17 +10,13 @@
 
 include_once("../core.php");
   	
+if(!Login::UserType())
+	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
+	
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
-  	case 'GetCurrentUser':
-  		Respond(Login::GetCurrentUser());
-    return;
 	default:
-		if($user = Login::Identify())
-			Respond($user);
-		else
-  			Respond(null, 'The user could not be identified. Please try again.');
-	return;
+		throw new Exception("Unhandled action: $action");
 }
 ?>

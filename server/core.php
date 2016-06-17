@@ -98,19 +98,19 @@ class Login
 			{
 	        	if(isset($_REQUEST['RememberMe']))
 	        	{
-			    	Db::Query("UPDATE users SET _session_id='".session_id()."' WHERE id=".$user['id']);
-		        	setcookie("permanent_session_id", session_id(), time() + 360*24*3600, "/");
+			    	Db::Query("UPDATE users SET _permanent_login_id='".session_id()."' WHERE id=".$user['id']);
+		        	setcookie("permanent_login_id", session_id(), time() + 360*24*3600, "/");
 		        }
 		        else
 		        {
-			    	Db::Query("UPDATE users SET _session_id='' WHERE id=".$user['id']);
-		        	setcookie("permanent_session_id", session_id(), 1, "/");				
+			    	Db::Query("UPDATE users SET _permanent_login_id='' WHERE id=".$user['id']);
+		        	setcookie("permanent_login_id", session_id(), 1, "/");				
 				}				
 			}
 			else
 			{
 				unset($_SESSION['User']);
-		        setcookie("permanent_session_id", session_id(), 1, "/");
+		        setcookie("permanent_login_id", session_id(), 1, "/");
         		setcookie("user_type", $user['type'], 1, "/");
         		return null;				
 			}
@@ -121,8 +121,8 @@ class Login
 			$user = $_SESSION['User'];
 		else
 		{
-			if(isset($_COOKIE['permanent_session_id']) and strlen($_COOKIE['permanent_session_id']) > 8)
-				$user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".addslashes($_COOKIE['permanent_session_id'])."'");	
+			if(isset($_COOKIE['permanent_login_id']) and strlen($_COOKIE['permanent_login_id']) > 8)
+				$user = Db::GetRowArray("SELECT * FROM users WHERE _permanent_login_id='".addslashes($_COOKIE['permanent_login_id'])."'");	
 			if(!$user)
 				return null;
 				
@@ -139,22 +139,22 @@ class Login
 	
 	static function Identify()
 	{
-		$user = Db::GetRowArray("SELECT * FROM users WHERE name='".addslashes($_REQUEST['UserName'])."' AND password='".addslashes($_REQUEST['Password'])."'");
+		$user = Db::GetRowArray("SELECT * FROM users WHERE (name='".addslashes($_REQUEST['UserName'])."' OR email='".addslashes($_REQUEST['UserName'])."') AND password='".addslashes($_REQUEST['Password'])."'");
 		if(!$user)
 		{			
 			self::Logout();
-			return null;			
+			return null;
 		}
 			
 	    if(isset($_REQUEST['RememberMe']))
 	    {
-			Db::Query("UPDATE users SET _session_id='".session_id()."' WHERE id=".$user['id']);
-			setcookie("permanent_session_id", session_id(), time() + 360*24*3600, "/");
+			Db::Query("UPDATE users SET _permanent_login_id='".session_id()."' WHERE id=".$user['id']);
+			setcookie("permanent_login_id", session_id(), time() + 360*24*3600, "/");
 		}
 		else
 		{
-			Db::Query("UPDATE users SET _session_id='' WHERE id=".$user['id']);
-			setcookie("permanent_session_id", session_id(), 1, "/");				
+			Db::Query("UPDATE users SET _permanent_login_id='' WHERE id=".$user['id']);
+			setcookie("permanent_login_id", session_id(), 1, "/");				
 		}
 		
 		if(!session_id())	
@@ -168,15 +168,8 @@ class Login
 	
 	static function GetCurrentUser()
 	{
-	/*	if($user = self::get_current_user())
-			return $user;
-		Respond(null, "No user identified.");
-	}
-	
-	static private function get_current_user()
-	{*/
-		if(isset($_REQUEST['UserName']))
-			return self::Identify();
+		/*if(isset($_REQUEST['UserName']))
+			return self::Identify();*/
 					
 		if(!session_id())	
 			session_start();
@@ -184,10 +177,10 @@ class Login
 		if(isset($_SESSION['User']))
 			return $_SESSION['User'];
 		
-		if(!isset($_COOKIE['permanent_session_id']) or strlen($_COOKIE['permanent_session_id']) < 8)
+		if(!isset($_COOKIE['permanent_login_id']) or strlen($_COOKIE['permanent_login_id']) < 8)
 			return null;
 			
-		if($user = Db::GetRowArray("SELECT * FROM users WHERE _session_id='".addslashes($_COOKIE['permanent_session_id'])."'"))
+		if($user = Db::GetRowArray("SELECT * FROM users WHERE _permanent_login_id='".addslashes($_COOKIE['permanent_login_id'])."'"))
 		{
         	unset($user['password']);
         	$_SESSION['User'] = $user;
@@ -219,7 +212,7 @@ class Login
 			session_start();
 		
 		if(isset($_SESSION['User']))
-			Db::Query("UPDATE users SET _session_id='' WHERE id=".$_SESSION['User']['id']);
+			Db::Query("UPDATE users SET _permanent_login_id='' WHERE id=".$_SESSION['User']['id']);
 			
 		if(isset($_COOKIE[session_name()]))
 			setcookie(session_name(), '', 1, '/' );
@@ -229,7 +222,7 @@ class Login
 		if(session_id())
 			session_destroy();
 		//Logger::Write(444);Logger::Write();
-		setcookie("permanent_session_id", "", 1, "/");        		
+		setcookie("permanent_login_id", "", 1, "/");        		
 		//setcookie("user_type", "", 1, "/");
 	}
 }

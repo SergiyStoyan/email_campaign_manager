@@ -8,10 +8,7 @@
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
 
-if(!session_id())	
-	session_start();
-
-include_once("api.php");
+include_once("core.php");
 Login::Logout();
 header("Location: ../");
 ?>

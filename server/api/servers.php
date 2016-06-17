@@ -7,11 +7,11 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-include_once("../api.php");
+include_once("../core.php");
 
-//Logger::Write($_GET);
-//Logger::Write($_POST);
-
+if(!Login::UserType())
+	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
+	
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
 {
@@ -39,6 +39,18 @@ switch ($action)
     return;
   	case 'Delete':
   		Respond(DataTable::Delete('servers', $_POST));
+    return;
+  	case 'TestServer':    
+	  	if($ftp = ftp_connect($_POST['host'], $_POST['port']))
+	  	{
+	    	if(!ftp_login($ftpc, $_POST['login'], $_POST['password']))
+	    		Respond(null, "No login");
+		
+			ftp_close($ftp);
+  			Respond("ok");	
+		}
+		else
+	    	Respond(null, "No connect");
     return;
 	default:
 		throw new Exception("Unhandled action: $action");

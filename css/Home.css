@@ -297,3 +297,8 @@ text-align: center;
 .ui-corner-br {
 	border-bottom-right-radius: 0px !important;
 }
+
+.dataTables_processing{
+	margin-top: 0px !important;
+	padding-top: 0px !important;
+}

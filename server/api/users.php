@@ -7,10 +7,10 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-include_once("../api.php");
+include_once("../core.php");
 
-//Logger::Write($_GET);
-//Logger::Write($_POST);
+if(!Login::UserType())
+	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) 
@@ -22,6 +22,7 @@ switch ($action)
 	  		[
 	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
+	  			['Name'=>'email', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'type', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  		],
 	  		'FROM users'

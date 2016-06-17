@@ -29,19 +29,13 @@
 
 <body ng-app="EmailCampaignManager" ng-init1="Initialize()">
 
-<!--div style="position:relative;width:100px;height:100px;background-color:#090">
-gdfgdfg
-<div>fdgdgdfg</div>
-<div style="position:absolute;top:0;left:0;right:0;bottom:0;z-index:1000;background-color:#007">rrrrrrrrrrrr</div>
-</div-->
-
      <header>
          <div class="content-wrapper">
              <div class="float-left">
                  <p class="site-title">Email Campaign Manager</p>
              </div>
              <div ng-if="User" class="float-right" style="padding-left:20px;padding-bottom:15px;text-align:right;">		
-				<span style="color:#ddd">{{User().name}}</span>
+				<span style="color:#ccc;font-weight:bold;">{{User().name}}</span>
 				<br><a href="#" ng-click="Logout()" ng-if="User().type" style="color:#000;font-weight1:bold;">Logout</a>
              </div>
              <div class="float-right">

@@ -7,10 +7,10 @@
 //        27 February 2007
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
-include_once("../api.php");
+include_once("../core.php");
 
-//Logger::Write($_GET);
-//Logger::Write($_POST);
+if(!Login::UserType())
+	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
 
 $_POST['user_id'] = Login::UserId();
 $action = isset($_GET['action']) ? $_GET['action'] : null;

@@ -1,30 +1,48 @@
 var Cliver = {	
 	
-	/*Request: function (url, data, callback) {
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: function (data) {
-            	$scope.$apply();
-        		//console.log(data);
-            	if(typeof(data) == 'string'){
-            		Cliver.ShowError(data);
-				}
-				else if(data._ERROR){
-            		Cliver.ShowError(data._ERROR);
-				}
-				else{
-                	$location.path('/campaigns');
-					//$rootScope.User = data;
-				}
-            },
-            error: function (xhr, error) {
-                console.log(error, xhr);
-            	Cliver.ShowError(xhr.responseText + "<br>" + error);
-            }
-        });
-	},*/
+	Ajax: {			
+		/*Request: function (url, data, callback) {
+	        $.ajax({
+	            type: 'POST',
+	            url: url,
+	            data: data,
+	            success: function (data) {
+	            	$scope.$apply();
+	        		//console.log(data);
+	            	if(typeof(data) == 'string'){
+	            		Cliver.ShowError(data);
+					}
+					else if(data._ERROR){
+	            		Cliver.ShowError(data._ERROR);
+					}
+					else{
+	                	$location.path('/campaigns');
+						//$rootScope.User = data;
+					}
+	            },
+	            error: function (xhr, error) {
+	                console.log(error, xhr);
+	            	Cliver.ShowError(xhr.responseText + "<br>" + error);
+	            }
+	        });
+		},*/
+		
+		GetError: function (data) {
+		    if (typeof(data) == 'string') {//exception catched by Logger	    
+				Cliver.ShowError(data);
+		        return data;
+		    }
+		    if (data.Error) {
+		        Cliver.ShowError(data.Error);
+		        return data.Error;
+		    }
+		    return null;
+		},
+		
+		GetData: function (data) {
+		    return data.Data;
+		},		
+	},	
 		
 	UpdateQueryStringParameter: function (uri, key, value) {		
 		var r = new RegExp('([?&])' + key + '(=[^&#]*)?', 'ig');
@@ -430,10 +448,8 @@ var Cliver = {
 	                        data: data,
 	                        success: function (data) {
 	                            e.show_processing(false);
-				                if (data.Error) {
-				                	Cliver.ShowError(data.Error);
+								if (Cliver.Ajax.GetError(data)) 
 				                    return;
-				                }
 	                            e.close();	                                
 	                            if(on_ok_success)
 	                              	on_ok_success();
@@ -464,10 +480,8 @@ var Cliver = {
 		                url: get_data_url,
 		                data: get_data_parameters,
 		                success: function (data) {
-			                if (data.Error) {
-			                	Cliver.ShowError(data.Error);
+							if (Cliver.Ajax.GetError(data)) 
 			                    return;
-			                }
 		                   
 		                    var angular_controller_e = content_div_e.closest('[ng-controller]');  
 							var angular_controller_scope = angular.element(angular_controller_e).scope();
@@ -607,11 +621,8 @@ var Cliver = {
 				                    url: Cliver.UpdateQueryStringParameter(table.definition.server.request_path, 'action', 'Delete'), 
 				                    data: parameters,
 				                    success: function (data) {
-						                if (data.Error) {
-						                	Cliver.ShowError(data.Error);
-						                    return;
-						                }
-						                
+										if (Cliver.Ajax.GetError(data))
+						                    return;						                
 				                        e.close();
 				                        if (table.definition.server)
 	                            			table.api().draw(false);
@@ -699,8 +710,7 @@ var Cliver = {
 	                url: Cliver.UpdateQueryStringParameter(definition.server.request_path, 'action', 'GetTableData'),// + definition.server.actions_prefix,
 	                data: data,
 	                success: function (data) {
-	                    if (data.Error) {
-	                        Cliver.ShowError(data.Error);
+						if (Cliver.Ajax.GetError(data)) {
 	                        if(data.Data)
 	                        	data = data.Data;
 	                        else
