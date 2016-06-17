@@ -136,9 +136,8 @@ var app = angular.module('EmailCampaignManager', [
 		        data: null,
 				//async: false,
 		        success: function (data) {
-		            //console.log(data);
-		            if (data.Error) {
-		            	Cliver.ShowError(data.Error);
+		            console.log(data);
+					if (Cliver.Ajax.GetError(data)) {
 						if($location.path() != '/login')
 							$location.path('/login');
 		                return;
@@ -191,8 +190,8 @@ var app = angular.module('EmailCampaignManager', [
 					return 'Users';
 				case 'servers':
 					return 'Servers';	
-				case 'contact':
-					return 'Contact';					
+				case 'email_lists':
+					return 'Email Lists';					
 			}
 			return null;
 		};
