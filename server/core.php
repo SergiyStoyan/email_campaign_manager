@@ -24,7 +24,7 @@ function Respond($data, $error=null)
 	echo json_encode($data);
 	exit();
 } 
-  	
+	  	
 /*$method = $_SERVER['REQUEST_METHOD'];
 //$request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
 switch ($method) 

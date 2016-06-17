@@ -9,6 +9,8 @@
 //********************************************************************************************
 include_once("../core.php");
 
+//if(!Login::UserType())
+//	header('Location: ../../');
 if(!Login::UserType())
 	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
 

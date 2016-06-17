@@ -302,3 +302,30 @@ text-align: center;
 	margin-top: 0px !important;
 	padding-top: 0px !important;
 }
+
+.Logout a{
+	color:#000;
+	font-weight1:bold;
+}
+
+.Logout a:hover{
+	color:#ddd;
+}
+
+table tbody tr.TestingServer{
+	background-color: #21fe64;
+}
+
+table tbody tr.ActiveServer.even{
+	background-color: #9e9;
+}
+table tbody tr.ActiveServer.odd{
+	background-color: #afa;
+}
+
+table tbody tr.DeadServer.even{
+	background-color: #a9a;
+}
+table tbody tr.DeadServer.odd{
+	background-color: #bab;
+}

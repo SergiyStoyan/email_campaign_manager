@@ -17,7 +17,7 @@
     </div>
     <div class="form-actions">
         <button ng-if1="!Processing" type="submit" ng-disabled="Form.$invalid || dataLoading" class="btn btn-danger">Login</button>
-        <img ng-if="Processing" src="{{ProcessingImageSrc}}" style="height:23px;width:auto;"/>
+        <processing/>
     </div>
 </form>
 </div>

@@ -1,31 +1,22 @@
 var Cliver = {	
 	
 	Ajax: {			
-		/*Request: function (url, data, callback) {
-	        $.ajax({
+		Request: function (url, data, on_success) {
+            $.ajax({
 	            type: 'POST',
 	            url: url,
 	            data: data,
 	            success: function (data) {
-	            	$scope.$apply();
-	        		//console.log(data);
-	            	if(typeof(data) == 'string'){
-	            		Cliver.ShowError(data);
-					}
-					else if(data._ERROR){
-	            		Cliver.ShowError(data._ERROR);
-					}
-					else{
-	                	$location.path('/campaigns');
-						//$rootScope.User = data;
-					}
+					if (Cliver.Ajax.GetError(data)) 
+			            return;
+			        on_success(data.Data);
 	            },
 	            error: function (xhr, error) {
 	                console.log(error, xhr);
-	            	Cliver.ShowError(xhr.responseText + "<br>" + error);
+                	Cliver.ShowError(xhr.responseText + "<br>" + error);
 	            }
 	        });
-		},*/
+		},
 		
 		GetError: function (data) {
 		    if (typeof(data) == 'string') {//exception catched by Logger	    

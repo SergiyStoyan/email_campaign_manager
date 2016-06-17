@@ -21,6 +21,7 @@ switch ($action)
 	  			['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'status', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
+	  			['Name'=>'status_time', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'host', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  			['Name'=>'sender_email', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 	  		],
@@ -41,16 +42,35 @@ switch ($action)
   		Respond(DataTable::Delete('servers', $_POST));
     return;
   	case 'TestServer':    
-	  	if($ftp = ftp_connect($_POST['host'], $_POST['port']))
+  	
+		$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$_POST['id']);
+		if(!$server)
+			Respond(null, "No such server: ".$_POST['id']);
+	  	
+	  	try
 	  	{
-	    	if(!ftp_login($ftpc, $_POST['login'], $_POST['password']))
-	    		Respond(null, "No login");
-		
-			ftp_close($ftp);
-  			Respond("ok");	
+		  	if($ftp = ftp_connect($server['host'], $server['port']))
+		  	{
+		    	if(!ftp_login($ftp, $server['login'], $server['password']))
+		    	{
+					ftp_close($ftp);
+					Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
+		    		Respond("No login");
+				}
+			
+				ftp_close($ftp);
+				Db::Query("UPDATE servers SET status='active', status_time=NOW() WHERE id=".$_POST['id']);
+	  			Respond("ok");	
+			}			
 		}
-		else
-	    	Respond(null, "No connect");
+		catch(Exception $e)
+		{
+			Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
+			Respond($e->getMessage());
+		}
+		
+		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
+	    Respond("No connect");
     return;
 	default:
 		throw new Exception("Unhandled action: $action");
