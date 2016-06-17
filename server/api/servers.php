@@ -51,29 +51,16 @@ switch ($action)
 		if(!$server)
 			Respond(null, "No such server: ".$_POST['id']);
 	  	
-	  	try
-	  	{
-		  	if($ftp = @ftp_connect($server['host'], $server['port']))
-		  	{
-		    	if(!@ftp_login($ftp, $server['login'], $server['password']))
-		    	{
-					@ftp_close($ftp);
-		    		Respond("No login");
-				}
-			
-				@ftp_close($ftp);
-				Db::Query("UPDATE servers SET status='active', status_time=NOW() WHERE id=".$_POST['id']);
-	  			Respond("ok");	
-			}			
-		}
-		catch(Exception $e)
+	  	$status = 'dead';
+		if($ftp = @ftp_connect($server['host'], $server['port']))
 		{
-			Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
-			Respond($e->getMessage());
+			if(@ftp_login($ftp, $server['login'], $server['password']))
+				$status = 'active';
+			@ftp_close($ftp);
 		}
-		
-		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$_POST['id']);
-	    Respond("No connect");
+		Db::Query("UPDATE servers SET status='$status', status_time=NOW() WHERE id=".$_POST['id']);
+		$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$_POST['id']);
+		Respond($server);
     return;
 	default:
 		throw new Exception("Unhandled action: $action");

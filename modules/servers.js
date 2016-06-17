@@ -6,7 +6,6 @@ app.controller('ServersController',
     ['$scope', '$rootScope', '$route',
     function ($scope, $rootScope, $route) {
     	
-    	var testing_server_ids2state = {};
     	var table_Servers;
     	
     	$scope.FillTable = function(){
@@ -46,18 +45,48 @@ app.controller('ServersController',
 		
 		function mark_rows(){
             var d = table_Servers.api().rows().data();
-            for (var i in d) {  
-            	if(Number(i) === i)
+            for (var i in d) {
+            	var row = table_Servers.find('tbody tr:eq(' + i +')');
+				switch(d[i][2]){
+					case 'dead':
+						row.removeClass('ActiveServer');
+						row.removeClass('TestingServer');
+						row.addClass('DeadServer');
+					break;
+					case 'active':
+						row.removeClass('DeadServer');
+						row.removeClass('TestingServer');
+						row.addClass('ActiveServer');
+					break;
+					case 'testing':
+						row.removeClass('ActiveServer');
+						row.removeClass('DeadServer');
+						row.addClass('TestingServer');
+					break;
+				}   
+            }
+		}
+		
+		function test_server(id){					
+            var d = table_Servers.api().rows().data();
+            for (var i in d) {
+            	if(d[i][0] != id)
             		continue;
             	var row = table_Servers.find('tbody tr:eq(' + i +')');
-				if(testing_server_ids2state[d[i][0]])
-				{
-					row.removeClass('ActiveServer');
-					row.removeClass('DeadServer');
-					row.addClass('TestingServer');
-				}
-				else {
-					switch(d[i][2]){
+				row.removeClass('ActiveServer');
+				row.removeClass('DeadServer');
+				row.addClass('TestingServer');
+				row.find('td:eq(1)').html('testing');
+				break;
+            }
+			
+			Cliver.Ajax.Request($rootScope.ApiUrl($route) + '?action=TestServer', {id: id}, function(data){				
+	            var d = table_Servers.api().rows().data();
+	            for (var i in d) {
+            		if(d[i][0] != id)
+	            		continue;
+	            	var row = table_Servers.find('tbody tr:eq(' + i +')');
+					switch(data.status){
 						case 'dead':
 							row.removeClass('ActiveServer');
 							row.removeClass('TestingServer');
@@ -74,16 +103,10 @@ app.controller('ServersController',
 							row.addClass('TestingServer');
 						break;
 					}
-				}   
-            }
-		}
-		
-		function test_server(id){			
-			testing_server_ids2state[id] = 1;
-			mark_rows();
-			Cliver.Ajax.Request($rootScope.ApiUrl($route) + '?action=TestServer', {id: id}, function(data){
-				testing_server_ids2state[id] = 0;
-				table_Servers.api().draw(false);
+					row.find('td:eq(1)').html(data.status);
+					row.find('td:eq(2)').html(data.status_time);
+					break;
+	            }
 			});
 		}
 	},
