@@ -506,10 +506,10 @@ var Cliver = {
 	            },
 	            left: {
 	                delete: true,
-	                details: true,
-	                edit: true,
 	            },
 	            right: {
+	                details: true,
+	                edit: true,
 	            },
 	            _templates: {
 	                new: {

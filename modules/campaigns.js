@@ -6,6 +6,10 @@ app.controller('CampaignsController',
     ['$scope', '$rootScope', '$route',
     function ($scope, $rootScope, $route) {
     	
+    	$scope.example = {
+        value: new Date(2010, 11, 28, 14, 57)
+      };
+    	
     	$scope.FillTable = function(){
 			 Cliver.InitTable({
 			 	table_id: 'table_Campaigns',

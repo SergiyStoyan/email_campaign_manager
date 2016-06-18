@@ -1,0 +1,130 @@
+<?php
+//********************************************************************************************
+//Author: Sergey Stoyan, CliverSoft.com
+//        http://cliversoft.com
+//        stoyan@cliversoft.com
+//        sergey.stoyan@gmail.com
+//        27 February 2007
+//Copyright: (C) 2007, Sergey Stoyan
+//********************************************************************************************
+
+include_once("constants.php");
+include_once("common/logger.php");
+Logger::Set(Constants::LogDirectory);
+include_once("common/db.php");
+  	  	
+include_once("api_misc.php");
+include_once("common/misc.php");
+
+Logger::Write2("STARTED".Logger::GetLogDir());
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//test servers
+////////////////////////////////////////////////////////////////////////////////////////////
+foreach(Db::GetFirstColumnArray("SELECT id FROM servers WHERE status='testing'") as $k=>$server_id)
+{
+	ApiMisc::TestServer($server_id, true);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//run campaigns
+////////////////////////////////////////////////////////////////////////////////////////////
+
+//ftp thows uncatchable errors, so it will suppress it 		
+//Logger::Hook(0);
+
+$server_error_count = 0;
+const MAX_ERROR_RUNNING_COUNT = 3;
+
+$cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
+foreach($cs as $i=>$c)
+{	
+	Logger::Write2("Starting campaign '".$c['name']."' id:".$c['name']);
+	$email_count = 0;
+	/*$ftp = get_ftp($c['server_id']);
+	if(!ftp)
+	{
+		Logger::Error("Campaigns id failed: "$c['id']);
+		Db::Query("UPDATE campaigns SET status='error' WHERE id=".$c['id']);
+		continue;
+	}*/
+	$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$c['server_id']);
+	Db::Query("UPDATE campaigns SET status='started' WHERE id=".$c['id']);
+	$emails = preg_split('/[\s,;]+/i', $c['email_list']);
+	foreach($emails as $to)
+	{		
+		$file = preg_replace('/[^\w].*/i', $c['subject'], "")."_".microtime(true);
+		$uri = "ftp://".$server['login'].":".$server['password']."@".$server['host'].":".$server['post']."//$file";
+		if(!$f = fopen($uri, "w"))
+		{
+			Logger::Error_("Could not open: $uri");
+			$server_error_count++;
+			continue;			
+		}		
+		if(!fwrite($f, get_eml($c['sender'], $to, $c['subject'], $c['template'])))
+		{
+			Logger::Error_("Could not write to: $uri");
+			if(++$server_error_count > MAX_ERROR_RUNNING_COUNT)
+				break;			
+		}
+		$server_error_count = 0;
+		$email_count++;
+	}
+		
+	if($server_error_count > MAX_ERROR_RUNNING_COUNT)
+	{
+		Logger::Error_("Campaign '".$c['name']."' failed: uploading file failed $server_error_count errors running");
+		Db::Query("UPDATE campaigns SET status='error' WHERE id=".$c['id']);
+		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$c['server_id']);
+		continue;
+	}
+	Logger::Write2("Emls uploaded : $email_count, failed $server_error_count");
+	Db::Query("UPDATE campaigns SET status='completed' WHERE id=".$c['id']);
+}
+//set error handler back	
+//Logger::Hook();
+Logger::Write2("COMPLETED");
+	
+/*function get_ftp($server_id)
+{			  	
+	$server = Db::GetRowArray("SELECT * FROM servers WHERE id=$server_id");
+	if(!$server)
+	{
+		Logger::Error("Server id does not exist: $server_id");
+		return null;
+	}
+	$ftp = @ftp_connect($server['host'], $server['port']);
+	if(!$ftp)
+	{
+		Logger::Error("No connection to ".Misc::GetArrayAsString($server));
+		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=$server_id");		
+		return null;
+	}
+	if(!@ftp_login($ftp, $server['login'], $server['password']))
+	{
+		Logger::Error("No login to ".Misc::GetArrayAsString($server));
+		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=$server_id");	
+		return null;	
+	}
+	Logger::Write("Opened connection to: ".Misc::GetArrayAsString($server));
+	return $ftp;
+}*/	
+
+function get_eml($from, $to, $subject, $body)
+{			  	
+	return <<<__END_OF_EML__
+From: $from
+MIME-Version: 1.0
+To: $to
+Subject: $subject
+Content-Type: multipart/mixed; boundary="080107000800000609090108"
+
+This is a message with multiple parts in MIME format.
+--180107000800000609090108
+Content-Type: text/plain
+
+$body
+--180107000800000609090108
+__END_OF_EML__;
+}
+?>

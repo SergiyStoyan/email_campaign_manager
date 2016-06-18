@@ -24,7 +24,7 @@ class Logger
 
 	static public function Set($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
 	{
-		if(self::$_log_dir !== false)
+		if(self::$_log_dir)
 			return;
 		if($log_dir) self::$_log_dir = $log_dir;
 		if($delete_logs_older_than_days) self::$_delete_logs_older_than_days = $delete_logs_older_than_days;
