@@ -1,5 +1,5 @@
 ﻿<div ng-controller="CampaignsController">
-
+		
 	<table id="table_Campaigns" style="width:100%;" ng-init="FillTable()">
 		<thead>
 			<tr>
@@ -20,8 +20,8 @@
 		Template<br /><select ng-model="Data.template_id" required><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
 		Email List<br /><select ng-model="Data.email_list_id" required><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
 		Server<br /><select ng-model="Data.server_id" required><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Restart <input type="checkbox" ng-model="Data.status" value="new" /><br />
-		Start<br /><input type="datetime-local" placeholder="yyyy-MM-ddTHH:mm:ss" ng-model="Data.start_time | date: 'yyyy-MM-ddTHH:mm:ss'" required /><br />
+		Restart <input type="checkbox" ng-model="Data.status == 'new'" ng-true-value="'new'"  ng-false-value="'{{Data.status}}'"/><br />
+		Start<br /><input date-time-input ng-model="Data.start_time" required /><br />
 	  </form>
 	</div>
 
@@ -31,7 +31,7 @@
 		Template<br /><select ng-model="Data.template_id" ng-disabled="true"><option ng-repeat="o in Options.templates" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
 		Email List<br /><select ng-model="Data.email_list_id" ng-disabled="true"><option ng-repeat="o in Options.email_lists" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
 		Server<br /><select ng-model="Data.server_id" ng-disabled="true"><option ng-repeat="o in Options.servers" value="{{o.id}}">{{o.name}}</option><option style="display:none" value="">---</option></select><br />
-		Start<br /><input type="datetime" ng-model="Data.start_time" ng-disabled="true" /><br />
+		Start<br /><input type="text" ng-model="Data.start_time" ng-disabled="true" /><br />
 	  </form>
 	</div>
 

@@ -1,15 +1,10 @@
 ﻿'use strict';
 
 //angular.module('Campaigns')
-
 app.controller('CampaignsController', 
     ['$scope', '$rootScope', '$route',
     function ($scope, $rootScope, $route) {
-    	
-    	$scope.example = {
-        value: new Date(2010, 11, 28, 14, 57)
-      };
-    	
+    	    	    	    	
     	$scope.FillTable = function(){
 			 Cliver.InitTable({
 			 	table_id: 'table_Campaigns',
@@ -70,3 +65,26 @@ app.controller('CampaignsController',
 		}
     }
 ]);
+
+app.directive(
+    'dateTimeInput',
+    function(dateFilter) {
+        return {
+            require: 'ngModel',
+            template: '<input type="datetime-local"></input>',
+            replace: true,
+            link: function(scope, elm, attrs, ngModelCtrl) {                    
+                ngModelCtrl.$formatters = [(function (modelValue) {
+                	//console.log(modelValue);
+                    return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm');
+                })];                
+                ngModelCtrl.$parsers = [(function(viewValue) {
+                	//console.log(viewValue);
+                	return viewValue.replace('T', ' ') + ":00";
+                })];
+            },
+        };
+});
+
+
+
