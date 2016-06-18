@@ -86,5 +86,27 @@ app.directive(
         };
 });
 
-
-
+app.directive(
+    'checkBox',
+    function(dateFilter) {
+        return {
+            require: 'ngModel',
+            template: '<input type="checkbox"></input>',
+            replace: true,
+            link: function(scope, elm, attrs, ngModelCtrl) { 
+            	var initial_value = null;                   
+                ngModelCtrl.$formatters = [(function (modelValue) {
+                	if(initial_value === null)
+                		initial_value = modelValue;
+                	console.log(modelValue, '=>', modelValue == attrs.trueValue);
+                    return modelValue == attrs.trueValue;
+                })];                
+                ngModelCtrl.$parsers = [(function(viewValue) {
+                	console.log(initial_value);
+                	console.log(attrs.trueValue);
+                	console.log(viewValue, "=>", viewValue ? attrs.trueValue : initial_value);
+                	return viewValue ? attrs.trueValue : initial_value;
+                })];
+            },
+        };
+});
