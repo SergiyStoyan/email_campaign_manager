@@ -26,8 +26,8 @@ app.controller('CampaignsController',
 			            if (data.Error) {
 			            	Cliver.ShowError(data.Error);
 			                return;
-			            }	            		
-		            	$scope.Options = data.Data;
+			            }
+			            $scope.Options = data.Data;
 		            	//console.log($scope.Options);
                 		$scope.$apply();
 		            },
@@ -86,7 +86,7 @@ app.directive(
         };
 });
 
-app.directive(
+/*app.directive(
     'checkBox',
     function(dateFilter) {
         return {
@@ -109,4 +109,4 @@ app.directive(
                 })];
             },
         };
-});
+});*/

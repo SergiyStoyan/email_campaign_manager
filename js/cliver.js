@@ -415,6 +415,10 @@ var Cliver = {
 	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success) {
 	            var e;
 
+	            /*var table = definition_._table;
+				var angular_controller_scope = table.closest('[ng-controller]').scope();
+				angular_controller_scope.*/
+				
 	            var buttons = {};
 	            if (put_data_url) {
 	                buttons[ok_button_text] = function () {

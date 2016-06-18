@@ -16,7 +16,7 @@ include_once("common/db.php");
 include_once("api_misc.php");
 include_once("common/misc.php");
 
-Logger::Write2("STARTED".Logger::GetLogDir());
+Logger::Write2("STARTED");
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //test servers
@@ -39,7 +39,7 @@ const MAX_ERROR_RUNNING_COUNT = 3;
 $cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
 foreach($cs as $i=>$c)
 {	
-	Logger::Write2("Starting campaign '".$c['name']."' id:".$c['name']);
+	Logger::Write2("Starting campaign '".$c['name']."', id:".$c['id']);
 	$email_count = 0;
 	/*$ftp = get_ftp($c['server_id']);
 	if(!ftp)
@@ -53,15 +53,21 @@ foreach($cs as $i=>$c)
 	$emails = preg_split('/[\s,;]+/i', $c['email_list']);
 	foreach($emails as $to)
 	{		
-		$file = preg_replace('/[^\w].*/i', $c['subject'], "")."_".microtime(true);
-		$uri = "ftp://".$server['login'].":".$server['password']."@".$server['host'].":".$server['post']."//$file";
-		if(!$f = fopen($uri, "w"))
+		$file = preg_replace('/[^\w].*/i', "", $c['subject'])."_".microtime(true);
+		$uri = "ftp://".$server['login'].":".$server['password']."@".$server['host'].":".$server['port']."//$file";
+		$f = fopen($uri, "w");
+		if(!$f)
 		{
 			Logger::Error_("Could not open: $uri");
 			$server_error_count++;
 			continue;			
 		}		
-		if(!fwrite($f, get_eml($c['sender'], $to, $c['subject'], $c['template'])))
+		$eml = get_eml($c['sender'], $to, $c['subject'], $c['template']);
+		//Logger::Write2($uri);
+		//Logger::Write2($eml);
+		$bc = fwrite($f, $eml);
+		//Logger::Write2($bc);
+		if(!$bc)
 		{
 			Logger::Error_("Could not write to: $uri");
 			if(++$server_error_count > MAX_ERROR_RUNNING_COUNT)
