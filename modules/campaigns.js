@@ -30,6 +30,7 @@ app.controller('CampaignsController',
 			            $scope.Options = data.Data;
 		            	//console.log($scope.Options);
                 		$scope.$apply();
+                		//$timeout(function(){$scope.Options = null;}, 0);
 		            },
 		            error: function (xhr, error) {
 		            	Cliver.ShowError(xhr.responseText);
