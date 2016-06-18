@@ -23,7 +23,9 @@ class Logger
 	static private $log_dir = false;
 
 	static public function Set($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
-	{	
+	{
+		if(self::$_log_dir !== false)
+			return;
 		if($log_dir) self::$_log_dir = $log_dir;
 		if($delete_logs_older_than_days) self::$_delete_logs_older_than_days = $delete_logs_older_than_days;
 		if($time_zone) self::$_time_zone = $time_zone;
@@ -31,6 +33,14 @@ class Logger
 	static private $_log_dir = null;
 	static private $_delete_logs_older_than_days = 10;
 	static private $_time_zone = 'Europe/London';
+	
+	static public function Hook($error_level=null)
+	{
+		register_shutdown_function("Logger::write_last_message");
+		if($error_level === null)
+			$error_level = error_reporting();
+		set_error_handler("Logger::write_error", $error_level);
+	}
 	
 	static public function Init($log_dir=null, $delete_logs_older_than_days=null, $time_zone=null)
 	{
@@ -268,10 +278,8 @@ class Logger
 	}
 }
 
-register_shutdown_function("Logger::write_last_message");
-set_error_handler("Logger::write_error", error_reporting());
+Logger::Hook();
 Logger::$ConsoleIsWebBrowser = Logger::IsRunningInWebContext();	
-
 
 /*
 Logger_::Init('Europe/Helsinki', null, E_ALL);

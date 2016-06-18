@@ -8,6 +8,7 @@
 //Copyright: (C) 2007, Sergey Stoyan
 //********************************************************************************************
 include_once("../core.php");
+include_once("../api_misc.php");
 
 if(!Login::UserType())
 	Respond(null, "User of type '".Login::UserType()."' cannot do this operation.");
@@ -30,37 +31,22 @@ switch ($action)
 	  	);
     return;
   	case 'Add':
-  		Respond(DataTable::Insert('servers', $_POST));
+  		Respond(DataTable::Insert('servers', $_POST));  
+  		ApiMisc::TestServer($_POST['id']);
     return;
   	case 'GetByKeys':
   		Respond(DataTable::GetByKeys('servers', $_POST));
     return;
   	case 'Save':
   		Respond(DataTable::Save('servers', $_POST));
+  		ApiMisc::TestServer($_POST['id']);
     return;
   	case 'Delete':
   		Respond(DataTable::Delete('servers', $_POST));
     return;
-  	case 'TestServer':    	
- 		//ftp_connect thows an uncatching error, so it will suppress it
- 		error_reporting(E_ERROR | E_PARSE); 
-		
-		Db::Query("UPDATE servers SET status='testing', status_time=0 WHERE id=".$_POST['id']);
-  	
-		$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$_POST['id']);
-		if(!$server)
-			Respond(null, "No such server: ".$_POST['id']);
-	  	
-	  	$status = 'dead';
-		if($ftp = @ftp_connect($server['host'], $server['port']))
-		{
-			if(@ftp_login($ftp, $server['login'], $server['password']))
-				$status = 'active';
-			@ftp_close($ftp);
-		}
-		Db::Query("UPDATE servers SET status='$status', status_time=NOW() WHERE id=".$_POST['id']);
-		$server = Db::GetRowArray("SELECT * FROM servers WHERE id=".$_POST['id']);
-		Respond($server);
+  	case 'TestServer': 
+  		ApiMisc::TestServer($_POST['id'], true);
+  		Respond(Db::GetRowArray("SELECT status, status_time FROM servers WHERE id=".$_POST['id']));
     return;
 	default:
 		throw new Exception("Unhandled action: $action");

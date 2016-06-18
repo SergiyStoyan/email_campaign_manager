@@ -5,10 +5,8 @@ SET foreign_key_checks = 0;
 SET time_zone = 'SYSTEM';
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-CREATE DATABASE IF NOT EXISTS `email_campaign_manager` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_bin */;
+CREATE DATABASE `email_campaign_manager` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_bin */;
 USE `email_campaign_manager`;
-
-SET @adminer_alter = '';
 
 DROP TABLE IF EXISTS `campaigns`;
 CREATE TABLE `campaigns` (
@@ -40,22 +38,23 @@ CREATE TABLE `email_lists` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) COLLATE latin1_bin NOT NULL,
   `user_id` int(11) NOT NULL,
-  `emails_file` varchar(256) COLLATE latin1_bin NOT NULL,
-  `emails` text COLLATE latin1_bin NOT NULL,
+  `file` varchar(256) COLLATE latin1_bin NOT NULL,
+  `list` text COLLATE latin1_bin NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `email_lists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 
-INSERT INTO `email_lists` (`id`, `name`, `user_id`, `emails_file`, `emails`) VALUES
+INSERT INTO `email_lists` (`id`, `name`, `user_id`, `file`, `list`) VALUES
 (1,	'test',	1,	'',	'test@dgds.com,gfds@fghsf.go\nfdgsfd\ndfgdfsg\ndfgdfg\ndfgsdfg\ndfgfds\nfdsfasdf\ndsfadsf\ndsfadsf\n@@@@@@@@@@@@');
 
 DROP TABLE IF EXISTS `servers`;
 CREATE TABLE `servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) COLLATE latin1_bin NOT NULL,
-  `status` enum('active','suspended','dead') COLLATE latin1_bin NOT NULL,
+  `status` enum('active','suspended','dead','testing') COLLATE latin1_bin NOT NULL,
+  `status_time` datetime NOT NULL,
   `host` varchar(256) COLLATE latin1_bin NOT NULL,
   `port` int(11) NOT NULL,
   `login` varchar(256) COLLATE latin1_bin NOT NULL,
@@ -66,8 +65,9 @@ CREATE TABLE `servers` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 
-INSERT INTO `servers` (`id`, `name`, `status`, `host`, `port`, `login`, `password`, `sender_email`) VALUES
-(1,	'test',	'active',	'ftp://t.com',	23,	't',	't',	'test@test.com');
+INSERT INTO `servers` (`id`, `name`, `status`, `status_time`, `host`, `port`, `login`, `password`, `sender_email`) VALUES
+(1,	'test',	'dead',	'2016-06-17 21:36:32',	'test.com',	23,	't',	't',	'test@test.com'),
+(2,	'37.59.235.166',	'active',	'2016-06-17 21:35:30',	'37.59.235.166',	21,	'FTPTest1',	'q1w2e3r4',	'sergey.stoyan@gmail.com');
 
 DROP TABLE IF EXISTS `templates`;
 CREATE TABLE `templates` (
@@ -91,58 +91,17 @@ CREATE TABLE `users` (
   `name` varchar(256) COLLATE latin1_bin NOT NULL,
   `password` varchar(256) COLLATE latin1_bin NOT NULL,
   `type` enum('admin','user','disabled') COLLATE latin1_bin NOT NULL,
-  `_session_id` varchar(256) COLLATE latin1_bin DEFAULT NULL,
+  `email` varchar(256) COLLATE latin1_bin NOT NULL,
+  `_permanent_login_id` varchar(256) COLLATE latin1_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`name`)
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 
-INSERT INTO `users` (`id`, `name`, `password`, `type`, `_session_id`) VALUES
-(1,	'sergey.stoyan@gmail.com',	'123',	'admin',	'44qa0c1bng6d99mb7so7f71225'),
-(2,	'root@q',	'123',	'admin',	''),
-(3,	'1@1',	'123',	'user',	'1na1j8327cg0c4bd9bs6digge2'),
-(7,	'q@q',	'fsdfsd',	'user',	NULL);
+INSERT INTO `users` (`id`, `name`, `password`, `type`, `email`, `_permanent_login_id`) VALUES
+(1,	'cliver',	'123',	'admin',	'sergey.stoyan@gmail.com',	''),
+(2,	'admin',	'123',	'admin',	'root@q',	''),
+(3,	'user',	'123',	'user',	'1@1',	'1na1j8327cg0c4bd9bs6digge2'),
+(7,	'user2',	'fsdfsd',	'user',	'q@q',	'');
 
-DELIMITER ;;
-CREATE PROCEDURE adminer_alter (INOUT alter_command text) BEGIN
-	DECLARE _table_name, _engine, _table_collation varchar(64);
-	DECLARE _table_comment varchar(64);
-	DECLARE done bool DEFAULT 0;
-	DECLARE tables CURSOR FOR SELECT TABLE_NAME, ENGINE, TABLE_COLLATION, TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE();
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-	OPEN tables;
-	REPEAT
-		FETCH tables INTO _table_name, _engine, _table_collation, _table_comment;
-		IF NOT done THEN
-			CASE _table_name
-				WHEN 'campaigns' THEN
-					IF _engine != 'InnoDB' OR _table_collation != 'latin1_bin' OR _table_comment != '' THEN
-						ALTER TABLE `campaigns` ENGINE=InnoDB COLLATE=latin1_bin COMMENT='';
-					END IF;
-				WHEN 'email_lists' THEN
-					IF _engine != 'InnoDB' OR _table_collation != 'latin1_bin' OR _table_comment != '' THEN
-						ALTER TABLE `email_lists` ENGINE=InnoDB COLLATE=latin1_bin COMMENT='';
-					END IF;
-				WHEN 'servers' THEN
-					IF _engine != 'InnoDB' OR _table_collation != 'latin1_bin' OR _table_comment != '' THEN
-						ALTER TABLE `servers` ENGINE=InnoDB COLLATE=latin1_bin COMMENT='';
-					END IF;
-				WHEN 'templates' THEN
-					IF _engine != 'InnoDB' OR _table_collation != 'latin1_bin' OR _table_comment != '' THEN
-						ALTER TABLE `templates` ENGINE=InnoDB COLLATE=latin1_bin COMMENT='';
-					END IF;
-				WHEN 'users' THEN
-					IF _engine != 'InnoDB' OR _table_collation != 'latin1_bin' OR _table_comment != '' THEN
-						ALTER TABLE `users` ENGINE=InnoDB COLLATE=latin1_bin COMMENT='';
-					END IF;
-				ELSE
-					SET alter_command = CONCAT(alter_command, 'DROP TABLE `', REPLACE(_table_name, '`', '``'), '`;\n');
-			END CASE;
-		END IF;
-	UNTIL done END REPEAT;
-	CLOSE tables;
-END;;
-DELIMITER ;
-CALL adminer_alter(@adminer_alter);
-DROP PROCEDURE adminer_alter;
-SELECT @adminer_alter;
--- 2016-06-13 16:37:33
+-- 2016-06-18 11:11:21

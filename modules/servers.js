@@ -80,7 +80,8 @@ app.controller('ServersController',
 				break;
             }
 			
-			Cliver.Ajax.Request($rootScope.ApiUrl($route) + '?action=TestServer', {id: id}, function(data){				
+			Cliver.Ajax.Request($rootScope.ApiUrl($route) + '?action=TestServer', {id: id}, function(data){	
+				//console.log(data);
 	            var d = table_Servers.api().rows().data();
 	            for (var i in d) {
             		if(d[i][0] != id)
