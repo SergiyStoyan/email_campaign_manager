@@ -516,6 +516,7 @@ var Cliver = {
 	                    text: "New",
 	                    onclick: function () {
 	                        var table = definition_._table;
+	                        //table.closest('[ng-controller]').scope().Data = null;
 	                        table.modalBox = table.definition.show_row_editor(	                        
 	                        	table.closest('[ng-controller]').find('[edit-form]'),
 	                        	'New',

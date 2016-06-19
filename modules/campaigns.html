@@ -17,9 +17,9 @@
 	<div edit-form class="hidden" ng-if1="ShowEditForm">
 	  <form name="Form" class="edit-form" novalidate>
 		Name<br /><input type="text" ng-model="Data.name" required /><br />	
-		Template<br /><select ng-model="Data.template_id" ng-options="o.id as o.name for o in Options.templates"></select><br />
-		Email List<br /><select ng-model="Data.email_list_id" ng-options="o.id as o.name for o in Options.email_lists"> </select><br />
-		Server<br /><select ng-model="Data.server_id" ng-options="o.id as o.name for o in Options.servers"></select><br />
+		Template<br /><select ng-model="Data.template_id" ng-options="o.id as o.name for o in Options.templates"" required ></select><br />
+		Email List<br /><select ng-model="Data.email_list_id" ng-options="o.id as o.name for o in Options.email_lists"" required > </select><br />
+		Server<br /><select ng-model="Data.server_id" ng-options="o.id as o.name for o in Options.servers"" required ></select><br />
 		Restart <input type="checkbox" ng-model="start" ng-change="Data.status = start ? 'new' : (Data.status == 'new' ? 'stopped' : Data.status)"/><br />
 		Start<br /><input date-time-input ng-model="Data.start_time" required /><br />
 	  </form>
