@@ -440,9 +440,7 @@ var Cliver = {
 	                table = $(row).parents('table').dataTable();
 	            table.api().row(index).data(cs);
 	        },
-	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success) {
-	        	return Cliver.ShowDialog({content_div_id: content_div_e.attr('id'), dialog: { title: title } });
-	        	
+	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success) {	        	
 	            var e;
 				
 	            var buttons = {};
