@@ -34,7 +34,7 @@ foreach(Db::GetFirstColumnArray("SELECT id FROM servers WHERE status='testing'")
 //Logger::Hook(0);
 
 $server_error_count = 0;
-const MAX_ERROR_RUNNING_COUNT = 3;
+const MAX_ERROR_RUNNING_COUNT = 2;
 
 $cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
 foreach($cs as $i=>$c)
@@ -75,6 +75,12 @@ foreach($cs as $i=>$c)
 		}
 		$server_error_count = 0;
 		$email_count++;
+		
+		if($email_count > 3)
+		{			
+			Logger::Write("Test limit reached. Break sending.");
+			break;
+		}
 	}
 		
 	if($server_error_count > MAX_ERROR_RUNNING_COUNT)
@@ -117,12 +123,17 @@ Logger::Write2("COMPLETED");
 }*/	
 
 function get_eml($from, $to, $subject, $body)
-{			  	
+{
 	return <<<__END_OF_EML__
-From: $from
-MIME-Version: 1.0
+x-sender: $from
+x-receiver: $to
+Return-Path: $from
 To: $to
 Subject: $subject
+From: $from
+Reply-To: $from
+Sender: $from
+MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="080107000800000609090108"
 
 This is a message with multiple parts in MIME format.
