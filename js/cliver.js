@@ -180,6 +180,7 @@ var Cliver = {
 	ShowDialog: function(definition) {
 	    var definition_ = {
 	        content_div_id: null,
+	        duplicate_content_div: false,
 	        adjust: true,
 	        background: null,
 	        dialog:{
@@ -216,12 +217,11 @@ var Cliver = {
 	        },
 	        on_close: function (event, ui) {
 	            var e = definition_._e;
-	            /*if (e.definition.content_div_id)
+	            if (e.definition.content_div_id && !e.definition.duplicate_content_div)
 	                e.dialog("close");
 	                //e.dialog("destroy");
 	            else
-	                e.remove();*/
-	            e.remove();
+	                e.remove();
 	        },
 	        _e:"!!!",
 	    };
@@ -253,58 +253,74 @@ var Cliver = {
 	    if (!definition.dialog.close)
 	        definition.dialog.close = definition.on_close;
 	    
-	    /*if (definition.content_div_id) {  		
+	    var e;
+        if (definition.content_div_id && !definition.duplicate_content_div){
 	        content_e = $("#" + definition.content_div_id);
 	        var old_e = content_e.parent();
 	        if (old_e.hasClass('ui-dialog-content')){
-	        	console.log(old_e);
-	            var g = old_e.dialog();
-	        	console.log(g);
-	            return old_e;
+	        	//console.log(old_e);
+	        	e = old_e;
+	            e.dialog('open');
 	        }
-	    }*/
+	    }
+	    
+	    if(!e){
+		    var html = '<div><div class="_loading" style="height:100%;width:100%;position:absolute;z-index:10;display:none;background-color:white;"><img src="' + Cliver.ProcessingImageSrc + '" style="display:block;margin:auto;position:relative;top:50%;transform:translateY(-50%);"/></div></div>';
+		    var e = $(html);
+		    e.definition = definition;
+		    //actually defintion's functions are using the object where they are defined, so dialog is to be passed there!
+		    definition_._e = e;
+		    	    
+		    var content_e;
+		    if (definition.content_div_id) {
+			    var parent_e = $("#" + definition.content_div_id).parent();
+			    parent_e.append(e);
+			    
+		    	if(definition.duplicate_content_div){
+			        content_e = $($("#" + definition.content_div_id)[0].outerHTML);
+			    	e.append(content_e);
+			    	var angular_controller_e = e.closest('[ng-controller]');
+			    	if(angular_controller_e.length){				
+			    		angular.element(angular_controller_e).injector().invoke(function($compile) {
+		  					var scope = angular.element(e).scope();
+		  					$compile(e)(scope);
+						});	
+					}				
+				}
+				else{
+			        content_e = $("#" + definition.content_div_id);
+			    	e.append(content_e);
+			    	var angular_controller_e = e.closest('[ng-controller]');
+			    	if(angular_controller_e.length){				
+			    		angular.element(angular_controller_e).injector().invoke(function($compile) {
+		  					var scope = angular.element(e).scope();
+		  					$compile(e)(scope);
+		  					console.log(1);
+						});	
+					}
+				}
+				
+			    content_e.uniqueId();
+			    parent_e.uniqueId();	        
+			    content_e.addClass("_content");
+			    definition.dialog.appendTo = '#' + parent_e.attr('id');
+			    content_e.show();	
+		    }
+		    else {
+		        content_e = $('<div class="_content"></div>');
+		    	e.append(content_e);	    	
+		    	$("body").append(e);
+		    }
+		            
+		    e.dialog(definition.dialog);
+		    e.dialog().dialog("widget").draggable("option", "containment", [-2000, 0, 2000, 1000]);
 
-	    var html = '<div><div class="_loading" style="height:100%;width:100%;position:absolute;z-index:10;display:none;background-color:white;"><img src="' + Cliver.ProcessingImageSrc + '" style="display:block;margin:auto;position:relative;top:50%;transform:translateY(-50%);"/></div></div>';
-	    var e = $(html);
-	    e.definition = definition;
-	    //actually defintion's functions are using the object where they are defined, so dialog is to be passed there!
-	    definition_._e = e;
-	    	    
-	    var content_e;
-	    if (definition.content_div_id) {
-	        //content_e = $("#" + definition.content_div_id).clone();
-	        content_e = $($("#" + definition.content_div_id).html());
-	        //content_e.uniqueId();
-	        content_e.addClass("_content");
-	    	e.append(content_e);
-	    	var parent_e = $("#" + definition.content_div_id).parent();
-	    	parent_e.append(e);
-	    	var angular_controller_e = e.closest('[ng-controller]');
-	    	if(angular_controller_e.length){				
-	    		angular.element(angular_controller_e).injector().invoke(function($compile) {
-  					var scope = angular.element(e).scope();
-  					$compile(e)(scope);
-				});	
-			}    		
-	    	parent_e.uniqueId();
-	    	definition.dialog.appendTo = '#' + parent_e.attr('id');
-	        content_e.show();    	
-	        //console.log(parent_e.attr('id'));
-	    }
-	    else {
-	        content_e = $('<div class="_content"></div>');
-	    	e.append(content_e);	    	
-	    	$("body").append(e);
-	    }
-	            
-	    e.dialog(definition.dialog);
-	    e.dialog().dialog("widget").draggable("option", "containment", [-2000, 0, 2000, 1000]);
-
-	    if (definition.background) {
-	        e.parent().find('*[class^="ui-resizable-handle"]').css('background-color', definition.background);
-	        e.parent().find('.ui-widget-content').css('background-color', definition.background);
-	        e.parent().css('background', definition.background);
-	    }
+		    if (definition.background) {
+		        e.parent().find('*[class^="ui-resizable-handle"]').css('background-color', definition.background);
+		        e.parent().find('.ui-widget-content').css('background-color', definition.background);
+		        e.parent().css('background', definition.background);
+		    }			
+		}
 
 	    e.show_processing = function (show) {
 	        if (show || show === undefined)
@@ -346,6 +362,18 @@ var Cliver = {
 	        return $(e).dialog("isOpen");
 	    }
 
+	    e.show = function(){
+	        return $(e).dialog("open");
+	    }
+	    
+	    e.hide = function(){
+	        return $(e).dialog("close");
+	    }
+
+	    e.destroy = function(){
+	        return e.remove();
+	    }	                
+	    
 	    e.close = definition.on_close;
 	    e.definition = definition;
 
@@ -413,6 +441,8 @@ var Cliver = {
 	            table.api().row(index).data(cs);
 	        },
 	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success) {
+	        	return Cliver.ShowDialog({content_div_id: content_div_e.attr('id'), dialog: { title: title } });
+	        	
 	            var e;
 				
 	            var buttons = {};
@@ -516,7 +546,8 @@ var Cliver = {
 	                    text: "New",
 	                    onclick: function () {
 	                        var table = definition_._table;
-	                        //table.closest('[ng-controller]').scope().Data = null;
+	                        table.closest('[ng-controller]').scope().Data = null;
+	                        table.closest('[ng-controller]').scope().$apply();
 	                        table.modalBox = table.definition.show_row_editor(	                        
 	                        	table.closest('[ng-controller]').find('[edit-form]'),
 	                        	'New',

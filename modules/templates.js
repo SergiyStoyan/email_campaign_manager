@@ -11,31 +11,211 @@ app.controller('TemplatesController',
 			 	table_id: 'table_Templates',
 			 	server: {
                 	request_path: $rootScope.ApiUrl($route),
-            	},
+            	},	
+		        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success){		        	
+		            var e;
+					
+		            var buttons = {};
+		            if (put_data_url) {
+		                buttons[ok_button_text] = function () {
+							var angular_controller_scope = content_div_e.closest('[ng-controller]').scope();
+							angular_controller_scope.Data.template = tinyMCE.activeEditor.getContent({format : 'raw'});
+							var data = angular_controller_scope.Data;
+							
+							if(content_div_e.find('form').scope().Form.$invalid)
+								return;
+
+		                    e.show_processing();
+
+		                    $.ajax({
+		                        type: 'POST',
+		                        url: put_data_url,
+		                        data: data,
+		                        success: function (data) {
+		                            e.show_processing(false);
+									if (Cliver.Ajax.GetError(data)) 
+					                    return;
+		                            e.close();	                                
+		                            if(on_ok_success)
+		                              	on_ok_success();
+		                        },
+		                        error: function (xhr, error) {
+		                            e.show_processing(false);
+		                            Cliver.ShowError(xhr.responseText);
+		                        }
+		                    });
+		                };
+		                buttons["Cancel"] = function () {
+		                    e.close();
+		                }
+		            }
+		            else {
+		                buttons[ok_button_text] = function () {
+		                    e.close();
+		                }
+		            }
+		            
+					content_div_e.uniqueId();
+					//required to tinymce accept focus when in a popup
+				    $.widget("ui.dialog", $.ui.dialog, {
+				    _allowInteraction: function(event) {
+				        return !!$(event.target).closest(".mce-container").length || this._super( event );
+				        }
+				    });
+		            e = Cliver.ShowDialog({content_div_id: content_div_e.attr('id'), dialog: { buttons: buttons, title: title } });
+		            if(get_data_url)
+		            {
+				        e.show_processing();
+			            $.ajax({
+			                type: 'POST',
+			                url: get_data_url,
+			                data: get_data_parameters,
+			                success: function (data) {
+								if (Cliver.Ajax.GetError(data)) 
+				                    return;
+			                   
+			                    var angular_controller_e = content_div_e.closest('[ng-controller]');  
+								var angular_controller_scope = angular.element(angular_controller_e).scope();
+			                    angular_controller_scope.$apply(function() {
+		    						angular_controller_scope.Data = data.Data;
+		    						tinyMCE.activeEditor.setContent(angular_controller_scope.Data.template, {format : 'raw'});
+		  						});
+		  					
+			                    e.show_processing(false);
+			                },
+			                error: function (xhr, error) {
+			                    e.show_processing(false);
+			                    Cliver.ShowError(xhr.responseText);
+			                }
+			            });
+		            }
+					
+					init_textarea();
+		            return e;
+		        }
         	});
 		};
-		
-		$scope.InitTextarea = function(){
+								
+		function init_textarea(){			
+			var t = tinymce.init({
+			  selector: 'textarea',
+			  width: 500,
+			  height: 100,
+			  plugins: [
+			    'advlist autolink lists link image charmap print preview anchor',
+			    'searchreplace visualblocks code fullscreen',
+			    'insertdatetime media table contextmenu paste code'
+			  ],
+			  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+			  content_css: [
+			    '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+			    '//www.tinymce.com/css/codepen.min.css'
+			  ],
+			});
 			
-			
-			
-// Prevent jQuery UI dialog from blocking focusin
-$(document).on('focusin', function(e) {
-    if ($(e.target).closest(".mce-window, .moxman-window").length) {
-		e.stopImmediatePropagation();
-	}
-});
-		
-		   tinyMCE.init({
-		      mode : "textareas",
-		      theme_advanced_toolbar_location : "top",
-		      theme_advanced_toolbar_align : "left",
-		      theme_advanced_statusbar_location : "bottom",
-		      theme_advanced_resizing : true
-		   });
-		};
-		$scope.InitTextarea2 = function(){alert(2);
-		 $('#summernote').summernote();
-   		};
-		
-    }]);
+			/*$(document).on('focusin', function(e) {
+    			if ($(e.target).closest(".mce-window, .moxman-window").length) {
+					e.stopImmediatePropagation();
+				}
+			});   
+			  
+	      $.widget("ui.dialog", $.ui.dialog, {
+	        _allowInteraction: function(event) {
+	            return !!$(event.target).closest(".mce-container").length || this._super( event );
+	            }
+	        });*/		
+		}		
+    }
+]);
+    
+/*app
+    .value('uiTinymceConfig', {})
+    .directive('uiTinymce', ['uiTinymceConfig', function(uiTinymceConfig) {
+    uiTinymceConfig = uiTinymceConfig || {};
+    var generatedIds = 0;
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ngModel) {
+            var expression, options, tinyInstance;
+            // generate an ID if not present
+            if (!attrs.id) {
+                attrs.$set('id', 'uiTinymce' + generatedIds++);
+                        //console.log(attrs);
+            }
+            options = {
+            	plugins:[
+				    'advlist autolink lists link image charmap print preview anchor',
+				    'searchreplace visualblocks code fullscreen',
+				    'insertdatetime media table contextmenu paste code'
+				],
+				toolbar:'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+				content_css:[
+				    '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+				    '//www.tinymce.com/css/codepen.min.css'
+				],
+                // Update model when calling setContent (such as from the source editor popup)
+                setup: function(ed) {
+                    ed.on('init', function(args) {
+                        ngModel.$render();
+                        //console.log(ed);
+                    });
+                    // Update model on button click
+                    ed.on('ExecCommand', function(e) {
+                        ed.save();
+                        ngModel.$setViewValue(elm.val());
+                        if (!scope.$$phase) {
+                            scope.$apply();
+                        }
+                        //console.log(ed);
+                       // alert(2);
+                    });
+                    // Update model on keypress
+                    ed.on('KeyUp', function(e) {
+                        //console.log(ed.isDirty());
+                        ed.save();
+                        ngModel.$setViewValue(elm.val());
+                        if (!scope.$$phase) {
+                            scope.$apply();
+                        }
+                    });
+                },
+                mode: 'exact',
+                elements: attrs.id
+            };
+            if (attrs.uiTinymce) {
+                expression = scope.$eval(attrs.uiTinymce);
+            } else {
+                expression = {};
+            }
+            
+            angular.extend(options, uiTinymceConfig, expression);
+            setTimeout(function() {                
+                tinymce.init(options);
+                
+				$.widget("ui.dialog", $.ui.dialog, {
+			        _allowInteraction: function(e) {
+			            return !!$(e.target).closest(".mce-container").length || this._super( event );
+			        }
+			    });        
+	        
+				$(document).on('focusin', function(e) {
+	    			if ($(e.target).closest(".mce-window, .moxman-window").length) {
+						e.stopImmediatePropagation();
+					}
+				}); 				
+            });
+
+            ngModel.$render = function() {
+                if (!tinyInstance) {
+                    tinyInstance = tinymce.get(attrs.id);
+                }
+                if (tinyInstance) {
+                    tinyInstance.setContent(ngModel.$viewValue || '');
+                }
+                console.log(tinyInstance);
+                //console.log(ngModel.$viewValue);
+                //alert(3);
+            };
+        }
+    };
+}]);*/ 
