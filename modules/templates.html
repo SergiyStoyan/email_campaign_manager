@@ -10,20 +10,27 @@
 		</thead>
 	</table>
 
+	<div new-form class="hidden">
+	  <form name="Form" class="edit-form" novalidate>
+		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
+		Subject:<br /><input type="text" ng-model="Data.subject" required /><br />
+		Template:<br /><textarea data-ui-tinymce data-ng-model="Data.template"></textarea>
+	  </form> 
+	</div>
+
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
 		Subject:<br /><input type="text" ng-model="Data.subject" required /><br />
-		Template:<br /><textarea id="tinymce1" data-ui-tinymce data-ng-model="Data.template"></textarea>
+		Template:<br /><textarea data-ui-tinymce data-ng-model="Data.template"></textarea>
 	  </form> 
-	</div>  
-  
 	</div>
 
 	<div details-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />	
-		Subject:<br /><input type="text" ng-model="Data.subject" ng-disabled="true" /><br />	
+		Subject:<br /><input type="text" ng-model="Data.subject" ng-disabled="true" /><br />
+		Template:<br />{{Data.template}}
 	  </form>
 	</div>
 

@@ -131,11 +131,11 @@ table tbody tr.even{
   border: 1px solid #999;
 }
 
-    .button:hover {
-        background-color: #fafafa;
-        border: 1px solid #666666;
-        color: #000;
-    }
+.button:hover {
+    background-color: #fafafa;
+    border: 1px solid #666666;
+    color: #000;
+}
     
 .table_floating_menu{
     display: inline-block;
@@ -147,11 +147,16 @@ table tbody tr.even{
     pointer-events:none;
 }
 
-    .table_floating_menu .button {
-        display: inline-block;
-        margin-right: 3px;
-        pointer-events:initial;
-    }
+.table_floating_menu .button:hover{
+    opacity:1;
+}
+
+.table_floating_menu .button {
+    display: inline-block;
+    margin-right: 3px;
+    pointer-events:initial;
+    opacity1:0.5;
+}
 
 .ui-widget {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif !important;

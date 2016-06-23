@@ -195,7 +195,7 @@ class Db
 	
 	static public function EscapeString($string, $connection_name=null)
 	{
-		return mysql_real_escape_string(self::get_link($connection_name), $string);
+		return mysql_real_escape_string($string, self::get_link($connection_name));
 	}
 }
 

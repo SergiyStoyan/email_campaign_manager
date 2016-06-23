@@ -176,6 +176,25 @@ var Cliver = {
 	    	}
 	    });
 	},
+	
+	Merge: function merge(f, s, overwrite) {
+        for (var i in s) {
+            if ($.type(s[i]) != 'object' && $.type(s[i]) != 'array') {
+                if (overwrite || f[i] == undefined)
+                    f[i] = s[i];
+            }
+            else {
+                if (f[i] == undefined) {
+                    if ($.type(s[i]) == 'object')
+                        f[i] = {};
+                    else
+                        f[i] = [];
+                }
+                merge(f[i], s[i], overwrite);
+            }
+        }
+        return f;
+    },
 
 	ShowDialog: function(definition) {
 	    var definition_ = {
@@ -227,28 +246,9 @@ var Cliver = {
 	    };
 	    if (!definition)
 	        return definition_;
-	        
-	    function merge(f, s, overwrite) {
-	        for (var i in s) {
-	            if ($.type(s[i]) != 'object' && $.type(s[i]) != 'array') {
-	                if (overwrite || f[i] == undefined)
-	                    f[i] = s[i];
-	            }
-	            else {
-	                if (f[i] == undefined) {
-	                    if ($.type(s[i]) == 'object')
-	                        f[i] = {};
-	                    else
-	                        f[i] = [];
-	                }
-	                merge(f[i], s[i], overwrite);
-	            }
-	        }
-	        return f;
-	    }
 	    //be sure that the output definition has come as InitTable parameter! 
 	    //If using an internal object as definition, it will bring to buggy confusing when several dialogs are on the same page
-	    definition = merge(definition, definition_);
+	    definition = Cliver.Merge(definition, definition_);
 	    
 	    if (!definition.dialog.close)
 	        definition.dialog.close = definition.on_close;
@@ -290,14 +290,13 @@ var Cliver = {
 				else{
 			        content_e = $("#" + definition.content_div_id);
 			    	e.append(content_e);
-			    	var angular_controller_e = e.closest('[ng-controller]');
+			    	/*var angular_controller_e = e.closest('[ng-controller]');
 			    	if(angular_controller_e.length){				
 			    		angular.element(angular_controller_e).injector().invoke(function($compile) {
 		  					var scope = angular.element(e).scope();
 		  					$compile(e)(scope);
-		  					console.log(1);
 						});	
-					}
+					}*/
 				}
 				
 			    content_e.uniqueId();
@@ -547,7 +546,7 @@ var Cliver = {
 	                        table.closest('[ng-controller]').scope().Data = null;
 	                        table.closest('[ng-controller]').scope().$apply();
 	                        table.modalBox = table.definition.show_row_editor(	                        
-	                        	table.closest('[ng-controller]').find('[edit-form]'),
+	                        	table.closest('[ng-controller]').find('[new-form]'),
 	                        	'New',
 	                        	null,
 	                        	null,
@@ -695,31 +694,13 @@ var Cliver = {
 	            //initComplete: function (settings, json) { alert(json);}
 	        },
 	        _table: "!!!",
-	        _merge: function merge(f, s, overwrite) {
-	            for (var i in s) {
-	                if ($.type(s[i]) != 'object' && $.type(s[i]) != 'array') {
-	                    if (overwrite || f[i] == undefined)
-	                        f[i] = s[i];
-	                }
-	                else {
-	                    if (f[i] == undefined) {
-	                        if ($.type(s[i]) == 'object')
-	                            f[i] = {};
-	                        else
-	                            f[i] = [];
-	                    }
-	                    merge(f[i], s[i], overwrite);
-	                }
-	            }
-	            return f;
-	        },
 	    };
 	    if (!definition)
 	        return definition_;
 
 	    //be sure that the output definition has come as InitTable parameter! 
 	    //If using an internal object as definition, it will bring to buggy confusing when several datatables on the same page
-	    var definition = definition_._merge(definition, definition_);
+	    var definition = Cliver.Merge(definition, definition_);
 
 	    if (!definition.server.actions_prefix)
 	        definition.server.actions_prefix = '';
