@@ -6,25 +6,87 @@ app.controller('TemplatesController',
     ['$scope', '$rootScope', '$route',
     function ($scope, $rootScope, $route) {
     	
-    	$scope.FillTable = function(){
-    		
-			var definition = Cliver.InitTable();
-			definition.table_id = 'table_Templates';
-			definition.server = {
-               	request_path: $rootScope.ApiUrl($route),
-            };
-            var show_row_editor = definition.show_row_editor;
-			definition.show_row_editor = function(content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success){
-				console.log(1);
-				var e = show_row_editor(content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success);
-				
-				var a = content_div_e.find('textarea:first');
-				a.uniqueId();
-				init_textarea('#' + a.attr('id'));
-		        return e;				
-			};				
-			Cliver.InitTable(definition);
-						
+    	$scope.FillTable = function(){				
+			Cliver.InitTable({
+			 	table_id: 'table_Templates',
+			 	server: {
+                	request_path: $rootScope.ApiUrl($route),
+            	},	
+		        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success){		        	
+		            var e;
+					
+		            var buttons = {};
+		            if (put_data_url) {
+		                buttons[ok_button_text] = function () {
+							$scope.Data.template = tinyMCE.activeEditor.getContent({format : 'raw'});
+							var data = $scope.Data;
+							
+							if(content_div_e.find('form').scope().Form.$invalid)
+								return;
+
+		                    e.show_processing();
+
+		                    $.ajax({
+		                        type: 'POST',
+		                        url: put_data_url,
+		                        data: data,
+		                        success: function (data) {
+		                            e.show_processing(false);
+									if (Cliver.Ajax.GetError(data)) 
+					                    return;
+		                            e.close();	                                
+		                            if(on_ok_success)
+		                              	on_ok_success();
+		                        },
+		                        error: function (xhr, error) {
+		                            e.show_processing(false);
+		                            Cliver.ShowError(xhr.responseText);
+		                        }
+		                    });
+		                };
+		                buttons["Cancel"] = function () {
+		                    e.close();
+		                }
+		            }
+		            else {
+		                buttons[ok_button_text] = function () {
+		                    e.close();
+		                }
+		            }
+		            
+					content_div_e.uniqueId();
+		            e = Cliver.ShowDialog({content_div_id: content_div_e.attr('id'), dialog: { buttons: buttons, title: title } });	
+		            if(get_data_url)
+		            {
+				        e.show_processing();
+			            $.ajax({
+			                type: 'POST',
+			                url: get_data_url,
+			                data: get_data_parameters,
+			                success: function (data) {
+								if (Cliver.Ajax.GetError(data)) 
+				                    return;
+			                   
+			                    $scope.$apply(function() {
+		    						$scope.Data = data.Data;
+		    						tinyMCE.activeEditor.setContent($scope.Data.template, {format : 'raw'});
+		  						});
+		  					
+			                    e.show_processing(false);
+			                },
+			                error: function (xhr, error) {
+			                    e.show_processing(false);
+			                    Cliver.ShowError(xhr.responseText);
+			                }
+			            });
+		            }
+					
+					var a = content_div_e.find('textarea:first');
+					a.uniqueId();
+					init_textarea('#' + a.attr('id'));
+		            return e;
+		        }
+        	});
 		};
 			
 		//required for tinymce to accept focus
@@ -41,8 +103,9 @@ app.controller('TemplatesController',
 								
 		function init_textarea(selector){
 			console.log(selector);
-			var t = tinymce.init({
+			var t = tinyMCE.init({
 			  selector: selector,
+			  valid_elements: '*[*]',
 			  width: 500,
 			  height: 100,
 			  plugins: [
@@ -56,11 +119,11 @@ app.controller('TemplatesController',
 			    '//www.tinymce.com/css/codepen.min.css'
 			  ],
 			});
-		}		
+		}
     }
 ]);
-    
-/*app
+/*    
+app
     .value('uiTinymceConfig', {})
     .directive('uiTinymce', ['uiTinymceConfig', function(uiTinymceConfig) {
     uiTinymceConfig = uiTinymceConfig || {};
@@ -121,9 +184,7 @@ app.controller('TemplatesController',
             }
             
             angular.extend(options, uiTinymceConfig, expression);
-            setTimeout(function() {                
-                tinymce.init(options);
-                
+            setTimeout(function() {                  
 				$.widget("ui.dialog", $.ui.dialog, {
 			        _allowInteraction: function(e) {
 			            return !!$(e.target).closest(".mce-container").length || this._super( event );
@@ -134,7 +195,8 @@ app.controller('TemplatesController',
 	    			if ($(e.target).closest(".mce-window, .moxman-window").length) {
 						e.stopImmediatePropagation();
 					}
-				}); 				
+				}); 			              
+                tinymce.init(options);	
             });
 
             ngModel.$render = function() {
@@ -150,4 +212,4 @@ app.controller('TemplatesController',
             };
         }
     };
-}]);*/ 
+}]); */

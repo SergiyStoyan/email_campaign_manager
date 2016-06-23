@@ -124,11 +124,16 @@ Logger::Write2("COMPLETED");
 
 function get_eml($from, $to, $subject, $body)
 {
-	//if(preg_match('/^\s*</i', $body))
-		//$content_type = "text/html; charset=UTF-8";
-		$content_type = "text/html";
-	//else
-		//$content_type = "text/plain";
+	//Logger::Write2($body);
+	if(preg_match('/^\s*\</i', $body))
+	{
+		$content_type = "text/html; charset=UTF-8";
+		//$content_type = "text/html";
+		$body = "<html><head></head><body>$body</body></html>";
+	}
+	else
+		$content_type = "text/plain";
+	//Logger::Write2($content_type);
 	return <<<__END_OF_EML__
 x-sender: $from
 x-receiver: $to
@@ -139,14 +144,13 @@ From: $from
 Reply-To: $from
 Sender: $from
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="080107000800000609090108"
+Content-Type: multipart/mixed; boundary="180107000800000609090108"
 
-This is a message with multiple parts in MIME format.
 --180107000800000609090108
 Content-Type: $content_type
 
 $body
---180107000800000609090108
+--180107000800000609090108--
 __END_OF_EML__;
 }
 ?>
