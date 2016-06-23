@@ -13,6 +13,17 @@
 		</thead>
 	</table>
 
+	<div new-form class="hidden">
+	  <form name="Form" class="edit-form" novalidate>
+		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
+		Host:<br /><input type="text" ng-model="Data.host" required /><br />	
+		Port:<br /><input type="text" ng-model="Data.port" value="21" ng-pattern="/\d+/" required /><br />	
+		Login:<br /><input type="text" ng-model="Data.login" required /><br />	
+		Password:<br /><input type="text" ng-model="Data.password" required /><br />	
+		Sender Email:<br /><input type="email" ng-model="Data.sender_email" required /><br />	
+	  </form>
+	</div>
+
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />	

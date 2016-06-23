@@ -11,6 +11,16 @@
 		</thead>
 	</table>
 
+	<div new-form class="hidden">
+	  <form name="Form" class="edit-form" novalidate>
+		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
+		Email:<br /><input type="email" ng-model="Data.email" required /><br />	
+		Password:<br /><input type="text" ng-model="Data.password" required /><br />	
+		Type:<br /><select ng-model="Data.type" ng-options="o for o in ['admin','user']" required></select><br />
+		<!--input type="submit" ng-click="Add(Data)" value="Add" /-->
+	  </form>
+	</div>
+
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
@@ -24,9 +34,9 @@
 	<div details-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />
-		Email:<br /><input type="email" ng-model="Data.email" required ng-disabled="true"/><br />	
-		Password:<br /><input type="text" ng-model="Data.password" required ng-disabled="true"/><br />	
-		Type:<br /><select ng-model="Data.type" ng-options="o for o in ['admin','user']" required ng-disabled="true"></select><br />
+		Email:<br /><input type="email" ng-model="Data.email" ng-disabled="true"/><br />	
+		Password:<br /><input type="text" ng-model="Data.password" ng-disabled="true"/><br />	
+		Type:<br /><input type="text" ng-model="Data.type" ng-disabled="true"></select><br />
 	  </form>
 	</div>
 

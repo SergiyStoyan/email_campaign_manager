@@ -124,11 +124,11 @@ Logger::Write2("COMPLETED");
 
 function get_eml($from, $to, $subject, $body)
 {
-	if(preg_match('/^\s*</i', $body))
+	//if(preg_match('/^\s*</i', $body))
 		//$content_type = "text/html; charset=UTF-8";
 		$content_type = "text/html";
-	else
-		$content_type = "text/plain";
+	//else
+		//$content_type = "text/plain";
 	return <<<__END_OF_EML__
 x-sender: $from
 x-receiver: $to

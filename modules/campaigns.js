@@ -67,24 +67,22 @@ app.controller('CampaignsController',
     }
 ]);
 
-app.directive(
-    'dateTimeInput',
-    function(dateFilter) {
-        return {
-            require: 'ngModel',
-            template: '<input type="datetime-local"></input>',
-            replace: true,
-            link: function(scope, elm, attrs, ngModelCtrl) {                    
-                ngModelCtrl.$formatters = [(function (modelValue) {
-                	//console.log(modelValue);
-                    return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm');
-                })];                
-                ngModelCtrl.$parsers = [(function(viewValue) {
-                	//console.log(viewValue);
-                	return viewValue.replace('T', ' ') + ":00";
-                })];
-            },
-        };
+app.directive('dateTimeInput', function(dateFilter) {
+    return {
+        require: 'ngModel',
+        template: '<input type="datetime-local"></input>',
+        replace: true,
+        link: function(scope, elm, attrs, ngModelCtrl) {                    
+            ngModelCtrl.$formatters = [(function (modelValue) {
+            	//console.log(modelValue);
+                return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm');
+            })];                
+            ngModelCtrl.$parsers = [(function(viewValue) {
+            	//console.log(viewValue);
+            	return viewValue.replace('T', ' ') + ":00";
+            })];
+        },
+    };
 });
 
 /*app.directive(
