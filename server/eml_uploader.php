@@ -36,7 +36,7 @@ foreach(Db::GetFirstColumnArray("SELECT id FROM servers WHERE status='testing'")
 $server_error_count = 0;
 const MAX_ERROR_RUNNING_COUNT = 2;
 
-$cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
+$cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.from_name, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
 foreach($cs as $i=>$c)
 {	
 	Logger::Write2("Starting campaign '".$c['name']."', id:".$c['id']);
@@ -62,7 +62,7 @@ foreach($cs as $i=>$c)
 			$server_error_count++;
 			continue;			
 		}		
-		$eml = get_eml($c['sender'], $to, $c['subject'], $c['template']);
+		$eml = get_eml($c['sender'], $c['from_name'], $to, $c['subject'], $c['template']);
 		//Logger::Write2($uri);
 		//Logger::Write2($eml);
 		$bc = fwrite($f, $eml);
@@ -122,7 +122,7 @@ Logger::Write2("COMPLETED");
 	return $ftp;
 }*/	
 
-function get_eml($from, $to, $subject, $body)
+function get_eml($from, $from_name, $to, $subject, $body)
 {
 	//Logger::Write2($body);
 	if(preg_match('/^\s*\</i', $body))
@@ -140,8 +140,8 @@ x-receiver: $to
 Return-Path: $from
 To: $to
 Subject: $subject
-From: $from
-Reply-To: $from
+From: $from_name <$from>
+Reply-To: $from_name <$from>
 Sender: $from
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="180107000800000609090108"

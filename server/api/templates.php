@@ -21,6 +21,7 @@ switch ($action)
 			[
 				['Name'=>'id', 'Searchable' => false, 'Order' => null, 'Expression'=>null],
 				['Name'=>'name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
+				['Name'=>'from_name', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 				['Name'=>'subject', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 				//['Name'=>'template', 'Searchable' => true, 'Order' => null, 'Expression'=>null],
 			],

@@ -782,7 +782,7 @@ var Cliver = {
 	        fill_menu(menu.right, definition.menu.right);
 	    }
 	    if (!$.isEmptyObject(definition.menu.left)) {
-	        menu.left = $('<div class="table_floating_menu" style="visibility: hidden; position: absolute;"></div>');
+	        menu.left = $('<div class="table_floating_menu outside" style="visibility: hidden; position: absolute;"></div>');
 	        table.parents(".dataTables_wrapper").after(menu.left);
 	        fill_menu(menu.left, definition.menu.left);
 	    }
