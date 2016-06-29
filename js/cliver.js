@@ -1,5 +1,13 @@
 var Cliver = {	
 	
+	DateTime: {
+		GetMySqlLocalDate: function(date){	
+			date = new Date(date);
+			return $.datepicker.formatDate('yy-mm-dd', date);
+			//return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDay() + 1);
+		},
+	},
+	
 	Ajax: {			
 		Request: function (url, data, on_success=null) {
             $.ajax({
@@ -439,7 +447,7 @@ var Cliver = {
 	                table = $(row).parents('table').dataTable();
 	            table.api().row(index).data(cs);
 	        },
-	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success) {	        	
+	        show_row_editor: function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success, on_data_loaded) {	        	
 	            var e;
 				
 	            var buttons = {};
@@ -501,7 +509,10 @@ var Cliver = {
 		                success: function (data) {
 							if (Cliver.Ajax.GetError(data)) 
 			                    return;
-		                   
+
+							if(on_data_loaded)
+								on_data_loaded(data);
+
 		                    var angular_controller_e = content_div_e.closest('[ng-controller]');  
 							var angular_controller_scope = angular.element(angular_controller_e).scope();
 		                    angular_controller_scope.$apply(function() {

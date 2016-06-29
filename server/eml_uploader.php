@@ -122,8 +122,10 @@ Logger::Write2("COMPLETED");
 	return $ftp;
 }*/	
 
-function get_eml($from, $from_name, $to, $subject, $body)
+function get_eml($from, $from_name, $to, $subject, $template)
 {
+	$body = preg_replace('/\%\%email\%\%/ig', $to, $template);
+	
 	//Logger::Write2($body);
 	if(preg_match('/^\s*\</i', $body))
 	{

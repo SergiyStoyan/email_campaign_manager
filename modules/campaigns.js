@@ -4,18 +4,99 @@
 app.controller('CampaignsController', 
     ['$scope', '$rootScope', '$route',
     function ($scope, $rootScope, $route) {
-    	    	    	    	
+    	
+    	var table;
     	$scope.FillTable = function(){
-			 Cliver.InitTable({
+			 table = Cliver.InitTable({
 			 	table_id: 'table_Campaigns',
 			 	server: {
                 	request_path: $rootScope.ApiUrl($route),
-            	},
+            	}, 
+            	menu: {              
+		            right: {
+		                edit: true,
+		                details: true,
+		                copy: {
+		                    text: "Copy",
+		                    onclick: function () {
+		                        if (!table.$('tr.selected').is("tr")) {
+		                            ShowMessage("No row selected!", "Warning");
+		                            return false;
+		                        }
+		                        
+		                        var parameters = {};
+		                        for (var i in table.definition.key_column_ids2name)
+		                            parameters[table.definition.key_column_ids2name[i]] = table.fnGetData(table.$('tr.selected'))[i];
+		                            
+		                        table.modalBox = table.definition.show_row_editor(	                        
+		                        	table.closest('[ng-controller]').find('[new-form]'),
+		                        	'New',
+		                        	Cliver.UpdateQueryStringParameter(table.definition.server.request_path, 'action', 'GetByKeys'), 
+		                        	parameters,
+		                        	"Add",
+		                        	Cliver.UpdateQueryStringParameter(table.definition.server.request_path, 'action', 'Add'), 
+		                        	function () {
+		                            	if (table.definition.server)
+		                                	table.api().draw(false);
+		                        	},
+		                        	function (data) {
+		                        		delete data.Data.id;
+		                            	if (table.definition.server)
+		                                	table.api().draw(false);
+		                        	}
+		                        );
+		                        return false;
+		                    },
+		                },
+		            },
+		        },
+		        datatable: {
+	            	ajax: function (data, callback, settings) {
+	            		var wheres = [];
+	            		if($scope.Filter.status)
+	            			wheres.push('campaigns.status="' + $scope.Filter.status + '"');
+	            		if($scope.Filter.start_time1)
+	            			//wheres.push('campaigns.start_time>="' + $scope.Filter.start_time1.toISOString().slice(0, 10) + '"');
+	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlLocalDate($scope.Filter.start_time1) + '"');
+	            		if($scope.Filter.start_time2)
+	            			//wheres.push('campaigns.start_time<="' + $scope.Filter.start_time2.toISOString().slice(0, 10) + '"');
+	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlLocalDate($scope.Filter.start_time2) + '"');
+			            data.Filter = wheres.join(' AND ');
+			            
+			            $.ajax({
+			                type: 'POST',
+			                url: Cliver.UpdateQueryStringParameter($rootScope.ApiUrl($route), 'action', 'GetTableData'),
+			                data: data,
+			                success: function (data) {
+								if (Cliver.Ajax.GetError(data)) {
+			                        if(data.Data)
+			                        	data = data.Data;
+			                        else
+			                        	data = { draw: 0, recordsTotal: 0, recordsFiltered: 0, data: [] };
+			                    }
+			                    callback(data.Data);
+			                },
+			                error: function (xhr, error) {
+			                    console.log(error, xhr);
+			                    Cliver.ShowError(xhr.responseText + '<br>' + error);
+			                }
+			            });
+			        }
+	            }
         	});
         	
         	$scope.GetOptions();
 		};
+		$scope.Filter = {
+			status: null,
+			start_time1: null,
+			start_time2: null,
+		};
 		
+		$scope.RedrawTable = function(){
+			table.api().draw();
+		}
+			
 		$scope.GetOptions = function(){
 			if(!$scope.Options){
 				$.ajax({
@@ -40,30 +121,6 @@ app.controller('CampaignsController',
 			return $scope.Options;
 		}
 		$scope.Options = null;
-		
-		$scope.Templates = function(){
-			return [
-      			{id: '1', name: 'Option A'},
-      			{id: '2', name: 'Option B'},
-      			{id: '3', name: 'Option C'}
-    		]
-		}
-		
-		$scope.EmailLists = function(){
-			return [
-      			{id: '1', name: 'EmailLists A'},
-      			{id: '2', name: 'Option B'},
-      			{id: '3', name: 'Option C'}
-    		]
-		}
-		
-		$scope.Servers = function(){
-			return [
-      			{id: '1', name: 'Servers A'},
-      			{id: '2', name: 'Option B'},
-      			{id: '3', name: 'Option C'}
-    		]
-		}
     }
 ]);
 

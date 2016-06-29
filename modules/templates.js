@@ -106,8 +106,10 @@ app.controller('TemplatesController',
 			var t = tinyMCE.init({
 			  selector: selector,
 			  valid_elements: '*[*]',
-			  width: 500,
-			  height: 100,
+			  //width: 500,
+			  //height: 100,
+			  //inline: true,
+			  visual: false,
 			  plugins: [
 			    'advlist autolink lists link image charmap print preview anchor',
 			    'searchreplace visualblocks code fullscreen',

@@ -334,3 +334,8 @@ table tbody tr.DeadServer.even{
 table tbody tr.DeadServer.odd{
 	background-color: #bab;
 }
+
+input[type="date"]{
+	width: 150px;
+	height1: 9px;
+}

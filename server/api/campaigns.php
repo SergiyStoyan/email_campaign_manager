@@ -28,8 +28,7 @@ switch ($action)
 	  			['Name'=>'status', 'Searchable' => true, 'Order' => null, 'Expression'=>'campaigns.status'],
 	  		],
 	  		'FROM campaigns INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.user_id='.$_POST['user_id']
-	  		)
-	  	);
+	  	));
     return;
   	case 'Add':
   		Respond(DataTable::Insert('campaigns', $_POST));

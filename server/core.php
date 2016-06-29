@@ -296,6 +296,15 @@ class DataTable
 		$total_count = Db::GetSingleValue("SELECT COUNT(".$fields[0]['Entity'].") $from_sql");
 			
 		$filtered_count = $total_count;
+        
+        if($_POST['Filter'])        
+        {
+            if(strstr($from_sql, ' WHERE '))
+                $from_sql .= " AND ";
+            else
+                $from_sql .= " WHERE "; 
+            $from_sql .= $_POST['Filter'];
+        }        
         $search_conditions = [];
         if($_POST['search']['value'])
         {
