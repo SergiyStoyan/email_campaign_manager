@@ -297,7 +297,7 @@ class DataTable
 			
 		$filtered_count = $total_count;
         
-        if($_POST['Filter'])        
+        if(!empty($_POST['Filter']))
         {
             if(strstr($from_sql, ' WHERE '))
                 $from_sql .= " AND ";

@@ -41,6 +41,7 @@ app.controller('CampaignsController',
 		                        	},
 		                        	function (data) {
 		                        		delete data.Data.id;
+		                        		data.Data.status = 'new';
 		                            	if (table.definition.server)
 		                                	table.api().draw(false);
 		                        	}
