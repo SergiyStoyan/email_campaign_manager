@@ -85,13 +85,15 @@ foreach($cs as $i=>$c)
 		
 	if($server_error_count > MAX_ERROR_RUNNING_COUNT)
 	{
-		Logger::Error_("Campaign '".$c['name']."' failed: uploading file failed $server_error_count errors running");
-		Db::Query("UPDATE campaigns SET status='error' WHERE id=".$c['id']);
+		$m = "Campaign '".$c['name']."' failed: uploading file failed $server_error_count errors running";
+		Logger::Error_($m);
+		Db::Query("UPDATE campaigns SET status='error', log=log+'\r\n'+NOW()+' '+'$m' WHERE id=".$c['id']);
 		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$c['server_id']);
 		continue;
 	}
-	Logger::Write2("Emls uploaded : $email_count, failed $server_error_count");
-	Db::Query("UPDATE campaigns SET status='completed' WHERE id=".$c['id']);
+	$m = "Emls uploaded : $email_count, failed $server_error_count";
+	Logger::Write2($m);
+	Db::Query("UPDATE campaigns SET status='completed', log=log+'\r\n'+NOW()+' '+'$m' WHERE id=".$c['id']);
 }
 //set error handler back	
 //Logger::Hook();
