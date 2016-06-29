@@ -337,5 +337,10 @@ table tbody tr.DeadServer.odd{
 
 input[type="date"]{
 	width: 150px;
-	height1: 9px;
+}
+
+.Filter{
+	height: 30px;
+	padding: 5px;
+	border: 1px solid #e2e2e2;
 }
