@@ -11,9 +11,15 @@
 
 	<div new-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Emails<br /><!--textarea ng-model="Data.list" style="overflow-y: scroll;" required /><br /-->	
-		<input type="file" ng-model="Data.list" pick-file /><br />
-		{{EmailsFileMessage}}
+		Emails<br />
+		
+		<fieldset data-ng-repeat="f in Files">
+			<input type="file" onchange="angular.element(this).scope().SetFile(this)" ng-file_id="{{f.Id}}" />
+			<button ng-click="RemoveFile(f.Id)">x</button>
+			<br />{{f.Message}}
+		</fieldset>
+		<button ng-click="AddFile()">Add file</button><br />
+		
 		Name<br /><input type="text" ng-model="Data.name" required /><br />	
 	  </form>
 	</div>
@@ -21,8 +27,15 @@
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
 		Emails<br /><!--textarea ng-model="Data.list" style="overflow-y: scroll;" required /-->
-		<input type="file" ng-model="Data.list" pick-file /><br />
-		{{EmailsFileMessage}}
+		<!--input type="file" ng-model="Data.list" pick-file /><br /-->
+				
+		<fieldset data-ng-repeat="f in Files">
+			<input type="file" onchange="angular.element(this).scope().SetFile(this)" ng-file_id="{{f.Id}}" />
+			<button ng-click="RemoveFile(f.Id)">x</button>
+			<br />{{f.Message}}
+		</fieldset>
+		<button ng-click="AddFile()">Add file</button><br />
+		
 		Name<br /><input type="text" ng-model="Data.name" required /><br />	
 	  </form>
 	</div>
