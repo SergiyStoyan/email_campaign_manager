@@ -14,7 +14,7 @@
 	</table>
 
 	<div new-form class="hidden">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form1" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
 		Host:<br /><input type="text" ng-model="Data.host" required /><br />	
 		Port:<br /><input type="text" ng-model="Data.port" value="21" ng-pattern="/\d+/" required /><br />	
@@ -25,7 +25,7 @@
 	</div>
 
 	<div edit-form class="hidden">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form2" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />
 		Host:<br /><input type="text" ng-model="Data.host" required /><br />
 		Port:<br /><input type="text" ng-model="Data.port" value="21" ng-pattern="/\d+/" required /><br />
@@ -36,7 +36,7 @@
 	</div>
 
 	<div details-form class="hidden">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form3" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required ng-disabled="true"/><br />
 		Host:<br /><input type="text" ng-model="Data.host" required ng-disabled="true" /><br />
 		Port:<br /><input type="text" ng-model="Data.port" value="21" required ng-disabled="true" /><br />

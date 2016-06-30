@@ -461,8 +461,9 @@ var Cliver = {
 						var angular_controller_scope = content_div_e.closest('[ng-controller]').scope();
 						var data = angular_controller_scope.Data;
 						
-						//console.log(angular_controller_scope.scope());
-						if(angular_controller_scope.scope().Form.$invalid)
+						var form = content_div_e.find('form').attr('name');
+						//console.log(content_div_e.find('form').scope()[form]);
+						if(angular_controller_scope[form].$invalid)
 							return;
 						//var data = form.serialize();
 						

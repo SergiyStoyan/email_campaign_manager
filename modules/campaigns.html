@@ -21,7 +21,7 @@
 	</table>
 
 	<div new-form class="hidden" ng-if1="ShowEditForm">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form1" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />
 		Template:<br /><select ng-model="Data.template_id" ng-options="o.id as o.name for o in Options.templates" required ></select><br />
 		Email List:<br /><select ng-model="Data.email_list_id" ng-options="o.id as o.name for o in Options.email_lists" required > </select><br />
@@ -32,7 +32,7 @@
 	</div>
 
 	<div edit-form class="hidden" ng-if1="ShowEditForm">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form2" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" required /><br />
 		Template:<br /><select ng-model="Data.template_id" ng-options="o.id as o.name for o in Options.templates" required ></select><br />
 		Email List:<br /><select ng-model="Data.email_list_id" ng-options="o.id as o.name for o in Options.email_lists" required > </select><br />
@@ -43,7 +43,7 @@
 	</div>
 
 	<div details-form class="hidden">
-	  <form name="Form" class="edit-form" novalidate>
+	  <form name="Form3" class="edit-form" novalidate>
 		Name:<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />	
 		Template:<br /><input type="text"  ng-model="Data.template_id" ng-disabled="true" /><br />
 		Email List:<br /><input type="text"  ng-model="Data.email_list_id" ng-disabled="true" /><br />
