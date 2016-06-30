@@ -6,6 +6,11 @@ var Cliver = {
 			return $.datepicker.formatDate('yy-mm-dd', date);
 			//return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDay() + 1);
 		},
+		
+		GetMySqlLocalDateTime: function(time){	
+			time = new Date(time);
+			return $.datepicker.formatDate('yy-mm-dd', time) + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+		},
 	},
 	
 	Ajax: {			
@@ -456,7 +461,8 @@ var Cliver = {
 						var angular_controller_scope = content_div_e.closest('[ng-controller]').scope();
 						var data = angular_controller_scope.Data;
 						
-						if(content_div_e.find('form').scope().Form.$invalid)
+						//console.log(angular_controller_scope.scope());
+						if(angular_controller_scope.scope().Form.$invalid)
 							return;
 						//var data = form.serialize();
 						

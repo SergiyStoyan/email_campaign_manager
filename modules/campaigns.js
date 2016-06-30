@@ -136,8 +136,10 @@ app.directive('dateTimeInput', function(dateFilter) {
                 return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm');
             })];                
             ngModelCtrl.$parsers = [(function(viewValue) {
-            	//console.log(viewValue);
-            	return viewValue.replace('T', ' ') + ":00";
+            	console.log(viewValue);
+            	//return viewValue.replace('T', ' ') + ":00";
+            	console.log(Cliver.DateTime.GetMySqlLocalDateTime(viewValue));
+            	return Cliver.DateTime.GetMySqlLocalDateTime(viewValue);
             })];
         },
     };

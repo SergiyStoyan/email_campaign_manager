@@ -11,39 +11,39 @@
 
 	<div new-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Emails<br />
+		Emails:<br />
 		
 		<fieldset data-ng-repeat="f in Files">
-			<input type="file" onchange="angular.element(this).scope().SetFile(this)" ng-file_id="{{f.Id}}" />
+			<input type="file" onchange="angular.element(this).scope().SetFile(this)" ng-file_id="{{f.Id}}" required />
 			<button ng-click="RemoveFile(f.Id)">x</button>
-			<br />{{f.Message}}
+			<span nowrap>{{f.Message}}</span><br />
+			Name:<br /><input type="text" ng-model="f.Name" required ng-change="alert(f.FileName); Data.lists[f.FileName].name = f.Name" /><br /><br />	
 		</fieldset>
 		<button ng-click="AddFile()">Add file</button><br />
 		
-		Name<br /><input type="text" ng-model="Data.name" required /><br />	
 	  </form>
 	</div>
 
 	<div edit-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Emails<br /><!--textarea ng-model="Data.list" style="overflow-y: scroll;" required /-->
-		<!--input type="file" ng-model="Data.list" pick-file /><br /-->
+		<!--Emails<br />
 				
 		<fieldset data-ng-repeat="f in Files">
 			<input type="file" onchange="angular.element(this).scope().SetFile(this)" ng-file_id="{{f.Id}}" />
 			<button ng-click="RemoveFile(f.Id)">x</button>
 			<br />{{f.Message}}
 		</fieldset>
-		<button ng-click="AddFile()">Add file</button><br />
+		<button ng-click="AddFile()">Add file</button><br />-->
 		
-		Name<br /><input type="text" ng-model="Data.name" required /><br />	
+		Name:<br /><input type="text" ng-model="Data.name" required /><br />	
+		Emails:<br /><textarea ng-model="Data.list" style="overflow-y: scroll;" required /><br />
 	  </form>
 	</div>
 
 	<div details-form class="hidden">
 	  <form name="Form" class="edit-form" novalidate>
-		Name<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />
-		<br />Emails<br /><textarea ng-model="Data.list" style="overflow-y: scroll;" ng-disabled="true" /><br />
+		Name:<br /><input type="text" ng-model="Data.name" ng-disabled="true" /><br />
+		Emails:<br /><textarea ng-model="Data.list" style="overflow-y: scroll;" ng-disabled="true" /><br />
 	  </form>
 	</div>
 

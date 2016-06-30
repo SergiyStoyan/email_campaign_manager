@@ -27,22 +27,18 @@ switch ($action)
 		));
     return;
   	case 'Add':
-  	case 'Save':
-  		if(!empty($_POST['lists']))
+  		foreach($_POST['lists'] as $n=>$post)
   		{
-  			$emails = [];
-  			foreach($_POST['lists'] as $n=>$es)
-  				$emails[] = $es;
-  			$_POST['list'] = join(',', array_unique($emails));
+  			$post['user_id'] = Login::UserId();
+			DataTable::Insert('email_lists', $post);			
 		}
-  		unset($_POST['lists']);
-  		if($action == 'Add')
-  			Respond(DataTable::Insert('email_lists', $_POST));
-  		else
-  			Respond(DataTable::Save('email_lists', $_POST));
+  		Respond(1);
     return;
   	case 'GetByKeys':
   		Respond(DataTable::GetByKeys('email_lists', $_POST));
+    return;
+  	case 'Save':
+  		Respond(DataTable::Save('email_lists', $_POST));
     return;
   	case 'Delete':
   		//if(Db::GetSingleValue("SELECT id FROM campaigns WHERE id=".$_POST['id']))

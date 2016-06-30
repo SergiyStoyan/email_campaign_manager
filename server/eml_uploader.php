@@ -87,13 +87,13 @@ foreach($cs as $i=>$c)
 	{
 		$m = "Campaign '".$c['name']."' failed: uploading file failed $server_error_count errors running";
 		Logger::Error_($m);
-		Db::Query("UPDATE campaigns SET status='error', log=log+'\r\n'+NOW()+' '+'$m' WHERE id=".$c['id']);
+		Db::Query("UPDATE campaigns SET status='error', log=CONCAT(log,'\r\n',NOW(),' ','$m') WHERE id=".$c['id']);
 		Db::Query("UPDATE servers SET status='dead', status_time=NOW() WHERE id=".$c['server_id']);
 		continue;
 	}
 	$m = "Emls uploaded : $email_count, failed $server_error_count";
 	Logger::Write2($m);
-	Db::Query("UPDATE campaigns SET status='completed', log=log+'\r\n'+NOW()+' '+'$m' WHERE id=".$c['id']);
+	Db::Query("UPDATE campaigns SET status='completed', log=CONCAT(log,'\r\n',NOW(),' ','$m') WHERE id=".$c['id']);
 }
 //set error handler back	
 //Logger::Hook();
@@ -126,7 +126,7 @@ Logger::Write2("COMPLETED");
 
 function get_eml($from, $from_name, $to, $subject, $template)
 {
-	$body = preg_replace('/\%\%email\%\%/ig', $to, $template);
+	$body = preg_replace('/\%\%email\%\%/i', $to, $template);
 	
 	//Logger::Write2($body);
 	if(preg_match('/^\s*\</i', $body))

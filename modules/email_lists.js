@@ -55,7 +55,6 @@ app.controller('EmailListsController',
 					break;
 				}
 			//console.log(file);
-			file.Message = e.files[0].name;
             var reader = new FileReader();		                
             reader.onload = function(e, w) {
                 $scope.$apply(function() {
@@ -63,15 +62,19 @@ app.controller('EmailListsController',
 	        			$scope.Data = {};
 	        		if(!$scope.Data.lists)
 	        			$scope.Data.lists = {};
-	        		$scope.Data.lists[reader.fileName] = reader.result;
-	        		if(!$scope.Data.name)
-	        			$scope.Data.name = reader.fileName;	        			
+	        		$scope.Data.lists[file.FileName] = {
+	        			list: reader.result,
+	        			name: file.Name,
+	        		};
+	        		//file.Name = reader.fileName;
         			//var emails = reader.result.split(/[\s,;]+/);
 	        		file.Message = "Found: " + reader.result.match(/[^\s,;]*?@[^\s,;]*?([\s,;]+|$)/g).length + " addresses";
                 });
             };
             //console.log(e.files[0].name);
-	        reader.fileName = e.files[0].name;
+	        file.Message = '';
+	        file.FileName = e.files[0].name;
+	        file.Name = file.FileName;
             reader.readAsText(e.files[0]);
 		};
 		
