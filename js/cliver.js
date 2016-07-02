@@ -2,13 +2,15 @@ var Cliver = {
 	
 	DateTime: {
 		GetMySqlLocalDate: function(date){	
-			date = new Date(date);
+			if(Object.prototype.toString.call(date) !== '[object Date]')
+				date = new Date(date);
 			return $.datepicker.formatDate('yy-mm-dd', date);
 			//return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDay() + 1);
 		},
 		
 		GetMySqlLocalDateTime: function(time){	
-			time = new Date(time);
+			if(Object.prototype.toString.call(time) !== '[object Date]')
+				time = new Date(time);
 			return $.datepicker.formatDate('yy-mm-dd', time) + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 		},
 	},

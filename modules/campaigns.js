@@ -137,7 +137,7 @@ app.directive('dateTimeInput', function(dateFilter) {
             })];                
             ngModelCtrl.$parsers = [(function(viewValue) {
             	console.log(viewValue);
-            	//return viewValue.replace('T', ' ') + ":00";
+            	//return viewValue.replace('T', ' ') + ":00"; 
             	console.log(Cliver.DateTime.GetMySqlLocalDateTime(viewValue));
             	return Cliver.DateTime.GetMySqlLocalDateTime(viewValue);
             })];

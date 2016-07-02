@@ -102,18 +102,22 @@ app.controller('TemplatesController',
 	    });
 								
 		function init_textarea(selector){
-			console.log(selector);
+			//console.log(selector);
 			var t = tinyMCE.init({
 			  selector: selector,
 			  valid_elements: '*[*]',
-			  //width: 500,
-			  //height: 100,
+			  width: '100%',
+			  height: 400,
+			  resize: true,
+			  autoresize_min_height: 400,
+			  //autoresize_max_height: 800,
 			  //inline: true,
 			  visual: false,
 			  plugins: [
 			    'advlist autolink lists link image charmap print preview anchor',
 			    'searchreplace visualblocks code fullscreen',
-			    'insertdatetime media table contextmenu paste code'
+			    'insertdatetime media table contextmenu paste code',
+			    'autoresize',
 			  ],
 			  toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
 			  content_css: [
