@@ -85,3 +85,4 @@ $RECYCLE.BIN/
 *.lnk
 server/constants.php
 server/constants.php
+*.rdp
