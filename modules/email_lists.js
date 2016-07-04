@@ -17,9 +17,9 @@ app.controller('EmailListsController',
         	var show_row_editor = table.definition.show_row_editor;
         	table.definition.show_row_editor = function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success, on_data_loaded) {	
         		show_row_editor(content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, function(){
-        			$scope.Files = [];
-    				$scope.AddFile();
-        			on_ok_success();
+	        			$scope.Files = [];
+	    				$scope.AddFile();
+	        			on_ok_success();
         			}
         			, on_data_loaded
         		);

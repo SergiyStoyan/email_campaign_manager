@@ -536,6 +536,10 @@ var Cliver = {
 		                }
 		            });
 	            }
+	            else{					
+					if(on_data_loaded)
+						on_data_loaded();
+				}
 
 	            return e;
 	        },

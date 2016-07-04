@@ -85,6 +85,20 @@ app.controller('CampaignsController',
 			        }
 	            }
         	});
+        	        	
+        	var show_row_editor = table.definition.show_row_editor;
+        	table.definition.show_row_editor = function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success, on_data_loaded) {	
+        		show_row_editor(content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success,
+	        		function(data){
+	        			if(!data)//new
+	        				$scope.Data = {
+	        					start_time: Cliver.DateTime.GetMySqlLocalDateTime(new Date),
+	        				};
+	        			//console.log($scope.Data);
+	        			$scope.$apply();
+	        		}
+           		);
+        	};
         	
         	$scope.GetOptions();
 		};
@@ -133,12 +147,13 @@ app.directive('dateTimeInput', function(dateFilter) {
         link: function(scope, elm, attrs, ngModelCtrl) {                    
             ngModelCtrl.$formatters = [(function (modelValue) {
             	//console.log(modelValue);
-                return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm');
+            	//console.log(new Date(modelValue), 'yyyy-MM-ddTHH:mm:ss');
+                return dateFilter(new Date(modelValue), 'yyyy-MM-ddTHH:mm:ss');
+                //return modelValue;                
             })];                
             ngModelCtrl.$parsers = [(function(viewValue) {
-            	console.log(viewValue);
-            	//return viewValue.replace('T', ' ') + ":00"; 
-            	console.log(Cliver.DateTime.GetMySqlLocalDateTime(viewValue));
+            	//console.log(viewValue);
+            	//console.log(Cliver.DateTime.GetMySqlLocalDateTime(viewValue));
             	return Cliver.DateTime.GetMySqlLocalDateTime(viewValue);
             })];
         },
