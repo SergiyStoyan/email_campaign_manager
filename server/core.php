@@ -146,6 +146,9 @@ class Login
 			return null;
 		}
 			
+		if(!session_id())	
+			session_start();
+			
 	    if(isset($_REQUEST['RememberMe']))
 	    {
 			Db::Query("UPDATE users SET _permanent_login_id='".session_id()."' WHERE id=".$user['id']);
@@ -157,8 +160,6 @@ class Login
 			setcookie("permanent_login_id", session_id(), 1, "/");				
 		}
 		
-		if(!session_id())	
-			session_start();
         unset($user['password']);
         $_SESSION['User'] = $user;		
         //setcookie("user_type", $user['type'], time() + 360*24*3600, "/");
