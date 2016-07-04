@@ -1,7 +1,7 @@
 ﻿<div ng-controller="CampaignsController">
 		
 	<label>
-		Status: <select class="Filter" ng-model="Filter.status" ng-change="RedrawTable();" ng-options="o for o in ['new','started','completed','stopped','error']" ><option value=""></option></select>
+		Status: <select class="Filter" ng-model="Filter.status" ng-change="RedrawTable();" ng-options="o for o in ['new','started','completed','error']" ><option value=""></option></select>
 		Since Date: <input type="date" ng-model="Filter.start_time1" ng-change="RedrawTable();" />
 		Before Date: <input type="date" ng-model="Filter.start_time2" ng-change="RedrawTable();" />
 	</label>

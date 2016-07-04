@@ -42,8 +42,8 @@ app.controller('CampaignsController',
 		                        	function (data) {
 		                        		delete data.Data.id;
 		                        		data.Data.status = 'new';
-		                            	if (table.definition.server)
-		                                	table.api().draw(false);
+		                            	//if (table.definition.server)
+		                                //	table.api().draw(false);
 		                        	}
 		                        );
 		                        return false;
@@ -58,10 +58,10 @@ app.controller('CampaignsController',
 	            			wheres.push('campaigns.status="' + $scope.Filter.status + '"');
 	            		if($scope.Filter.start_time1)
 	            			//wheres.push('campaigns.start_time>="' + $scope.Filter.start_time1.toISOString().slice(0, 10) + '"');
-	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlLocalDate($scope.Filter.start_time1) + '"');
+	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlDateString($scope.Filter.start_time1) + '"');
 	            		if($scope.Filter.start_time2)
 	            			//wheres.push('campaigns.start_time<="' + $scope.Filter.start_time2.toISOString().slice(0, 10) + '"');
-	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlLocalDate($scope.Filter.start_time2) + '"');
+	            			wheres.push('campaigns.start_time>="' + Cliver.DateTime.GetMySqlDateString($scope.Filter.start_time2) + '"');
 			            data.Filter = wheres.join(' AND ');
 			            
 			            $.ajax({
@@ -90,9 +90,11 @@ app.controller('CampaignsController',
         	table.definition.show_row_editor = function (content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success, on_data_loaded) {	
         		show_row_editor(content_div_e, title, get_data_url, get_data_parameters, ok_button_text, put_data_url, on_ok_success,
 	        		function(data){
+	        			if(on_data_loaded)
+	        				on_data_loaded(data);
 	        			if(!data)//new
 	        				$scope.Data = {
-	        					start_time: Cliver.DateTime.GetMySqlLocalDateTime(new Date),
+	        					start_time: Cliver.DateTime.GetMySqlDateTimeString(new Date),
 	        				};
 	        			//console.log($scope.Data);
 	        			$scope.$apply();
@@ -153,8 +155,8 @@ app.directive('dateTimeInput', function(dateFilter) {
             })];                
             ngModelCtrl.$parsers = [(function(viewValue) {
             	//console.log(viewValue);
-            	//console.log(Cliver.DateTime.GetMySqlLocalDateTime(viewValue));
-            	return Cliver.DateTime.GetMySqlLocalDateTime(viewValue);
+            	//console.log(Cliver.DateTime.GetMySqlDateTimeString(viewValue));
+            	return Cliver.DateTime.GetMySqlDateTimeString(viewValue);
             })];
         },
     };

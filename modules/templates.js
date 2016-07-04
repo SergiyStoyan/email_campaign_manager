@@ -21,8 +21,10 @@ app.controller('TemplatesController',
 							$scope.Data.template = tinyMCE.activeEditor.getContent({format : 'raw'});
 							var data = $scope.Data;
 							
-							if(content_div_e.find('form').scope().Form.$invalid)
-								return;
+							//var form = content_div_e.find('form').attr('name');
+							//console.log($scope[form].$invalid, form);
+							//if($scope[form].$invalid)
+							//	return;
 
 		                    e.show_processing();
 

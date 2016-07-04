@@ -16,18 +16,18 @@ class Constants
 	const DataBasePassword = "123";
 	const AdminEmail = "sergey.stoyan@gmail.com";
 	const LogDirectory = "c:\\temp\\logs6/";
-	const LogUrl = "http://87.117.228.105/~crawler/logs6";
+	const LogUrl = "";
 }
 
 class Constants1
 {
-	const DataBaseHost = "127.0.0.1";	
+	const DataBaseHost = "localhost";	
 	const DataBase = "email_campaign_manager";
+	const DataBaseUser = "crawler";
+	const DataBasePassword = "Qwerty1234";
 	const AdminEmail = "sergey.stoyan@gmail.com";
-	const LogDirectory = "/home/crawler/public_html/logs/";
-	const LogUrl = "http://87.117.228.105/~crawler/logs";
-	const CacheDirectory = "/home/crawler/cache/";
-	const DefaultImageName = "property-deal-image-coming-soon.jpg";
+	const LogDirectory = "/home/crawler/public_html/logs_test/";
+	const LogUrl = "";
 }
 
 ?>

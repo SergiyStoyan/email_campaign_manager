@@ -30,13 +30,14 @@ foreach(Db::GetFirstColumnArray("SELECT id FROM servers WHERE status='testing'")
 //run campaigns
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+
 //ftp thows uncatchable errors, so it will suppress it 		
 //Logger::Hook(0);
 
 $server_error_count = 0;
 const MAX_ERROR_RUNNING_COUNT = 2;
 
-$cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.from_name, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<NOW()");
+$cs = Db::GetArray("SELECT campaigns.id, campaigns.name, email_lists.id AS email_list_id, email_lists.list AS email_list, servers.id AS server_id, servers.sender_email AS sender, templates.id AS template_id, templates.from_name, templates.subject, templates.template FROM campaigns INNER JOIN templates ON campaigns.template_id=templates.id INNER JOIN servers ON campaigns.server_id=servers.id INNER JOIN email_lists ON campaigns.email_list_id=email_lists.id WHERE campaigns.status IN ('new', 'started') AND campaigns.start_time<from_unixtime(UNIX_TIMESTAMP())");
 foreach($cs as $i=>$c)
 {	
 	Logger::Write2("Starting campaign '".$c['name']."', id:".$c['id']);

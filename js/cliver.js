@@ -1,16 +1,22 @@
 var Cliver = {	
 	
 	DateTime: {
-		GetMySqlLocalDate: function(date){	
-			if(Object.prototype.toString.call(date) !== '[object Date]')
+		GetMySqlDateString: function(date){	
+			if(Object.prototype.toString.call(date) !== '[object Date]'){				
 				date = new Date(date);
+				date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+			}
 			return $.datepicker.formatDate('yy-mm-dd', date);
 			//return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDay() + 1);
 		},
 		
-		GetMySqlLocalDateTime: function(time){	
-			if(Object.prototype.toString.call(time) !== '[object Date]')
-				time = new Date(time);
+		GetMySqlDateTimeString: function(time){	
+		//console.log(time);
+			if(Object.prototype.toString.call(time) !== '[object Date]'){
+				time = new Date(time);	
+				time = new Date(time.getTime() + time.getTimezoneOffset() * 60 * 1000);
+			}
+		//console.log(time);
 			return $.datepicker.formatDate('yy-mm-dd', time) + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
 		},
 	},
