@@ -77,11 +77,11 @@ foreach($cs as $i=>$c)
 		$server_error_count = 0;
 		$email_count++;
 		
-		if($email_count > 3)
+		/*if($email_count > 3)
 		{			
 			Logger::Write("Test limit reached. Break sending.");
 			break;
-		}
+		}*/
 	}
 		
 	if($server_error_count > MAX_ERROR_RUNNING_COUNT)
